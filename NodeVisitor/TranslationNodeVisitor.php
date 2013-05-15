@@ -11,6 +11,7 @@
 
 namespace Symfony\Bridge\Twig\NodeVisitor;
 
+use Symfony\Bridge\Twig\Node\SafeTransNode;
 use Symfony\Bridge\Twig\Node\TransNode;
 
 /**
@@ -75,6 +76,12 @@ class TranslationNodeVisitor implements \Twig_NodeVisitorInterface
             // extract trans nodes
             $this->messages[] = array(
                 $node->getNode('body')->getAttribute('data'),
+                $this->getReadDomainFromNode($node->getNode('domain')),
+            );
+        } elseif ($node instanceof SafeTransNode) {
+            // extract trans nodes
+            $this->messages[] = array(
+                $node->getNode('message')->getAttribute('value'),
                 $this->getReadDomainFromNode($node->getNode('domain')),
             );
         }
