@@ -14,6 +14,9 @@ namespace Symfony\Bridge\Twig\Extension;
 use Symfony\Bridge\Twig\TokenParser\TransTokenParser;
 use Symfony\Bridge\Twig\TokenParser\TransChoiceTokenParser;
 use Symfony\Bridge\Twig\TokenParser\TransDefaultDomainTokenParser;
+use Symfony\Bridge\Twig\TokenParser\SafeTransTokenParser;
+use Symfony\Bridge\Twig\TokenParser\SafeTransChoiceTokenParser;
+use Symfony\Bridge\Twig\TokenParser\SafeTransDefaultDomainTokenParser;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Bridge\Twig\NodeVisitor\TranslationNodeVisitor;
 use Symfony\Bridge\Twig\NodeVisitor\TranslationDefaultDomainNodeVisitor;
@@ -72,6 +75,14 @@ class TranslationExtension extends \Twig_Extension
 
             // {% trans_default_domain "foobar" %}
             new TransDefaultDomainTokenParser(),
+
+            // {% safetrans %}Symfony is great!{% endsafetrans %}
+            new SafeTransTokenParser(),
+
+            // {% safetranschoice count %}
+            //     {0} There is no apples|{1} There is one apple|]1,Inf] There is {{ count }} apples
+            // {% endsafetranschoice %}
+            new SafeTransChoiceTokenParser(),
         );
     }
 
