@@ -1,5 +1,9 @@
 {% use "bootstrap_base_layout.html.twig" %}
 
+{# Disable errors shown on form labels #}
+
+{% block form_label_errors %}{% endblock form_label_errors %}
+
 {# Widgets #}
 
 {% block money_widget -%}
@@ -281,6 +285,7 @@
         {{- form_label(form) -}}
         {{- form_widget(form, widget_attr) -}}
         {{- form_help(form) -}}
+        {{- form_errors(form) -}}
     </{{ element|default('div') }}>
 {%- endblock form_row %}
 
@@ -288,13 +293,13 @@
 
 {% block form_errors -%}
     {%- if errors|length > 0 -%}
-        <span class="{% if form is not rootform %}invalid-feedback{% else %}alert alert-danger{% endif %} d-block">
+        <div class="{% if form is not rootform %}invalid-feedback{% else %}alert alert-danger{% endif %} d-block">
             {%- for error in errors -%}
                 <span class="d-block">
-                    <span class="form-error-icon badge badge-danger text-uppercase">{{ 'Error'|trans({}, 'validators') }}</span> <span class="form-error-message">{{ error.message }}</span>
+                    <span class="form-error-message">{{ error.message }}</span>
                 </span>
             {%- endfor -%}
-        </span>
+        </div>
     {%- endif %}
 {%- endblock form_errors %}
 
