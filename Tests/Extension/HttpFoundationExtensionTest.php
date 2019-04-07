@@ -17,6 +17,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RequestContext;
 
+/**
+ * @group legacy
+ */
 class HttpFoundationExtensionTest extends TestCase
 {
     /**
