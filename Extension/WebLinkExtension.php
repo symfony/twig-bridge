@@ -122,7 +122,7 @@ class WebLinkExtension extends AbstractExtension
     }
 
     /**
-     * Indicates to the client that it should prerender this resource .
+     * Indicates to the client that it should prerender this resource.
      *
      * @param array $attributes The attributes of this link (e.g. "['as' => true]", "['pr' => 0.5]")
      *
