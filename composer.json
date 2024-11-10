@@ -40,6 +40,7 @@
         "symfony/property-info": "^6.4|^7.0",
         "symfony/routing": "^6.4|^7.0",
         "symfony/translation": "^6.4|^7.0",
+        "symfony/validator": "^6.4|^7.0",
         "symfony/yaml": "^6.4|^7.0",
         "symfony/security-acl": "^2.8|^3.0",
         "symfony/security-core": "^6.4|^7.0",

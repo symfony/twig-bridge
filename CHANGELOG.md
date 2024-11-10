@@ -6,6 +6,7 @@ CHANGELOG
 
  * Add `is_granted_for_user()` Twig function
  * Add `field_id()` Twig form helper function
+ * Add a `Twig` constraint that validates Twig templates
 
 7.2
 ---
