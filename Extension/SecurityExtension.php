@@ -31,7 +31,6 @@ final class SecurityExtension extends AbstractExtension
     public function __construct(
         private ?AuthorizationCheckerInterface $securityChecker = null,
         private ?ImpersonateUrlGenerator $impersonateUrlGenerator = null,
-        private ?UserAuthorizationCheckerInterface $userSecurityChecker = null,
     ) {
     }
 
@@ -58,8 +57,12 @@ final class SecurityExtension extends AbstractExtension
 
     public function isGrantedForUser(UserInterface $user, mixed $attribute, mixed $subject = null, ?string $field = null, ?AccessDecision $accessDecision = null): bool
     {
-        if (!$this->userSecurityChecker) {
-            throw new \LogicException(\sprintf('An instance of "%s" must be provided to use "%s()".', UserAuthorizationCheckerInterface::class, __METHOD__));
+        if (null === $this->securityChecker) {
+            return false;
+        }
+
+        if (!$this->securityChecker instanceof UserAuthorizationCheckerInterface) {
+            throw new \LogicException(\sprintf('You cannot use "%s()" if the authorization checker doesn\'t implement "%s".%s', __METHOD__, UserAuthorizationCheckerInterface::class, interface_exists(UserAuthorizationCheckerInterface::class) ? ' Try upgrading the "symfony/security-core" package to v7.3 minimum.' : ''));
         }
 
         if (null !== $field) {
@@ -71,7 +74,7 @@ final class SecurityExtension extends AbstractExtension
         }
 
         try {
-            return $this->userSecurityChecker->isGrantedForUser($user, $attribute, $subject, $accessDecision);
+            return $this->securityChecker->isGrantedForUser($user, $attribute, $subject, $accessDecision);
         } catch (AuthenticationCredentialsNotFoundException) {
             return false;
         }
@@ -123,7 +126,7 @@ final class SecurityExtension extends AbstractExtension
             new TwigFunction('impersonation_path', $this->getImpersonatePath(...)),
         ];
 
-        if ($this->userSecurityChecker) {
+        if ($this->securityChecker instanceof UserAuthorizationCheckerInterface) {
             $functions[] = new TwigFunction('is_granted_for_user', $this->isGrantedForUser(...));
         }
 
