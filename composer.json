@@ -51,9 +51,9 @@
         "symfony/expression-language": "^6.4|^7.0",
         "symfony/web-link": "^6.4|^7.0",
         "symfony/workflow": "^6.4|^7.0",
-        "twig/cssinliner-extra": "^2.12|^3",
-        "twig/inky-extra": "^2.12|^3",
-        "twig/markdown-extra": "^2.12|^3"
+        "twig/cssinliner-extra": "^3",
+        "twig/inky-extra": "^3",
+        "twig/markdown-extra": "^3"
     },
     "conflict": {
         "phpdocumentor/reflection-docblock": "<3.2.2",
