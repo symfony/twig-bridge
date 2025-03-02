@@ -19,7 +19,6 @@ use Twig\Node\Expression\ArrayExpression;
 use Twig\Node\Expression\ConstantExpression;
 use Twig\Node\Expression\FilterExpression;
 use Twig\Node\ModuleNode;
-use Twig\Node\Node;
 use Twig\Node\Nodes;
 use Twig\Source;
 use Twig\TwigFilter;
@@ -28,15 +27,13 @@ class TwigNodeProvider
 {
     public static function getModule($content)
     {
-        $emptyNodeExists = class_exists(EmptyNode::class);
-
         return new ModuleNode(
             new BodyNode([new ConstantExpression($content, 0)]),
             null,
-            $emptyNodeExists ? new EmptyNode() : new ArrayExpression([], 0),
-            $emptyNodeExists ? new EmptyNode() : new ArrayExpression([], 0),
-            $emptyNodeExists ? new EmptyNode() : new ArrayExpression([], 0),
-            $emptyNodeExists ? new EmptyNode() : null,
+            new EmptyNode(),
+            new EmptyNode(),
+            new EmptyNode(),
+            new EmptyNode(),
             new Source('', '')
         );
     }
@@ -50,16 +47,10 @@ class TwigNodeProvider
             ] : [];
         }
 
-        if (class_exists(Nodes::class)) {
-            $args = new Nodes($arguments);
-        } else {
-            $args = new Node($arguments);
-        }
-
         return new FilterExpression(
             new ConstantExpression($message, 0),
             new TwigFilter('trans'),
-            $args,
+            new Nodes($arguments),
             0
         );
     }
