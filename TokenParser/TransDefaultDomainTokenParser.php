@@ -29,7 +29,7 @@ final class TransDefaultDomainTokenParser extends AbstractTokenParser
 
         $this->parser->getStream()->expect(Token::BLOCK_END_TYPE);
 
-        return new TransDefaultDomainNode($expr, $token->getLine(), $this->getTag());
+        return new TransDefaultDomainNode($expr, $token->getLine());
     }
 
     public function getTag(): string

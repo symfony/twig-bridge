@@ -18,7 +18,6 @@ use Twig\Environment;
 use Twig\Extension\CoreExtension;
 use Twig\Loader\LoaderInterface;
 use Twig\Node\Expression\ArrayExpression;
-use Twig\Node\Expression\ConditionalExpression;
 use Twig\Node\Expression\ConstantExpression;
 use Twig\Node\Expression\Ternary\ConditionalTernary;
 use Twig\Node\Expression\Variable\ContextVariable;
@@ -207,27 +206,15 @@ class SearchAndRenderBlockNodeTest extends TestCase
 
     public function testCompileLabelWithLabelThatEvaluatesToNull()
     {
-        if (class_exists(ConditionalTernary::class)) {
-            $conditional = new ConditionalTernary(
-                // if
-                new ConstantExpression(true, 0),
-                // then
-                new ConstantExpression(null, 0),
-                // else
-                new ConstantExpression(null, 0),
-                0
-            );
-        } else {
-            $conditional = new ConditionalExpression(
-                // if
-                new ConstantExpression(true, 0),
-                // then
-                new ConstantExpression(null, 0),
-                // else
-                new ConstantExpression(null, 0),
-                0
-            );
-        }
+        $conditional = new ConditionalTernary(
+            // if
+            new ConstantExpression(true, 0),
+            // then
+            new ConstantExpression(null, 0),
+            // else
+            new ConstantExpression(null, 0),
+            0
+        );
 
         $arguments = new Nodes([new ContextVariable('form', 0), $conditional]);
 
@@ -250,27 +237,15 @@ class SearchAndRenderBlockNodeTest extends TestCase
 
     public function testCompileLabelWithLabelThatEvaluatesToNullAndAttributes()
     {
-        if (class_exists(ConditionalTernary::class)) {
-            $conditional = new ConditionalTernary(
-                // if
-                new ConstantExpression(true, 0),
-                // then
-                new ConstantExpression(null, 0),
-                // else
-                new ConstantExpression(null, 0),
-                0
-            );
-        } else {
-            $conditional = new ConditionalExpression(
-                // if
-                new ConstantExpression(true, 0),
-                // then
-                new ConstantExpression(null, 0),
-                // else
-                new ConstantExpression(null, 0),
-                0
-            );
-        }
+        $conditional = new ConditionalTernary(
+            // if
+            new ConstantExpression(true, 0),
+            // then
+            new ConstantExpression(null, 0),
+            // else
+            new ConstantExpression(null, 0),
+            0
+        );
 
         $arguments = new Nodes([
             new ContextVariable('form', 0),
