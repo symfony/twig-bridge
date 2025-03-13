@@ -6,6 +6,7 @@ CHANGELOG
 
  * Add `is_granted_for_user()` Twig function
  * Add `field_id()` Twig form helper function
+ * Add `TemplatedEmail::getTranslatableSubject()` method
 
 7.2
 ---
