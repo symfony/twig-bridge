@@ -20,10 +20,7 @@ use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\MimeMessageNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\PropertyNormalizer;
-use Symfony\Component\Serializer\Normalizer\TranslatableNormalizer;
 use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Translation\IdentityTranslator;
-use Symfony\Component\Translation\TranslatableMessage;
 
 class TemplatedEmailTest extends TestCase
 {
@@ -47,7 +44,6 @@ class TemplatedEmailTest extends TestCase
             ->htmlTemplate('text.html.twig')
             ->context($context = ['a' => 'b'])
             ->locale($locale = 'fr_FR')
-            ->subject($subject = new TranslatableMessage('hello {{ name }}', ['name' => 'John'], 'greetings'))
         ;
 
         $email = unserialize(serialize($email));
@@ -55,14 +51,12 @@ class TemplatedEmailTest extends TestCase
         $this->assertEquals('text.html.twig', $email->getHtmlTemplate());
         $this->assertEquals($context, $email->getContext());
         $this->assertEquals($locale, $email->getLocale());
-        $this->assertEquals($subject, $email->getTranslatableSubject());
     }
 
     public function testSymfonySerialize()
     {
         // we don't add from/sender to check that validation is not triggered to serialize an email
         $e = new TemplatedEmail();
-        $e->subject(new TranslatableMessage('hello.world'));
         $e->to('you@example.com');
         $e->textTemplate('email.txt.twig');
         $e->htmlTemplate('email.html.twig');
@@ -73,7 +67,6 @@ class TemplatedEmailTest extends TestCase
 
         $expectedJson = <<<EOF
 {
-    "subject": "hello.world",
     "htmlTemplate": "email.html.twig",
     "textTemplate": "email.txt.twig",
     "locale": "en",
@@ -91,15 +84,6 @@ class TemplatedEmailTest extends TestCase
         }
     ],
     "headers": {
-        "subject": [
-            {
-                "value": "hello.world",
-                "name": "Subject",
-                "lineLength": 76,
-                "lang": null,
-                "charset": "utf-8"
-            }
-        ],
         "to": [
             {
                 "addresses": [
@@ -124,7 +108,6 @@ EOF;
         $serializer = new Serializer([
             new ArrayDenormalizer(),
             new MimeMessageNormalizer($propertyNormalizer),
-            new TranslatableNormalizer(new IdentityTranslator()),
             new ObjectNormalizer(null, null, null, $extractor),
             $propertyNormalizer,
         ], [new JsonEncoder()]);
