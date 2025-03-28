@@ -120,7 +120,7 @@ class TwigValidatorTest extends ConstraintValidatorTestCase
             // Unknown filter error
             ['Hello {{ name|unknown_filter }}', 'Unknown "unknown_filter" filter at line 1.', 1],
             // Invalid variable syntax
-            ['Hello {{ .name }}', 'Unexpected token "punctuation" of value "." at line 1.', 1],
+            ['Hello {{ .name }}', 'Unexpected token "operator" of value "." at line 1.', 1],
         ];
     }
 }
