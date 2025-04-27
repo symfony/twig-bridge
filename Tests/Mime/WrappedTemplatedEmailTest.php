@@ -15,7 +15,6 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Twig\Mime\BodyRenderer;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Twig\Environment;
-use Twig\Error\LoaderError;
 use Twig\Loader\FilesystemLoader;
 
 /**
