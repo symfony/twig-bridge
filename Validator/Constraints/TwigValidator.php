@@ -45,26 +45,33 @@ class TwigValidator extends ConstraintValidator
 
         $value = (string) $value;
 
-        if (!$constraint->skipDeprecations) {
-            $prevErrorHandler = set_error_handler(static function ($level, $message, $file, $line) use (&$prevErrorHandler) {
-                if (\E_USER_DEPRECATED !== $level) {
-                    return $prevErrorHandler ? $prevErrorHandler($level, $message, $file, $line) : false;
-                }
-
-                $templateLine = 0;
-                if (preg_match('/ at line (\d+)[ .]/', $message, $matches)) {
-                    $templateLine = $matches[1];
-                }
-
-                throw new Error($message, $templateLine);
-            });
-        }
-
         $realLoader = $this->twig->getLoader();
         try {
             $temporaryLoader = new ArrayLoader([$value]);
             $this->twig->setLoader($temporaryLoader);
-            $this->twig->parse($this->twig->tokenize(new Source($value, '')));
+
+            if (!$constraint->skipDeprecations) {
+                $prevErrorHandler = set_error_handler(static function ($level, $message, $file, $line) use (&$prevErrorHandler) {
+                    if (\E_USER_DEPRECATED !== $level) {
+                        return $prevErrorHandler ? $prevErrorHandler($level, $message, $file, $line) : false;
+                    }
+
+                    $templateLine = 0;
+                    if (preg_match('/ at line (\d+)[ .]/', $message, $matches)) {
+                        $templateLine = $matches[1];
+                    }
+
+                    throw new Error($message, $templateLine);
+                });
+            }
+
+            try {
+                $this->twig->parse($this->twig->tokenize(new Source($value, '')));
+            } finally {
+                if (!$constraint->skipDeprecations) {
+                    restore_error_handler();
+                }
+            }
         } catch (Error $e) {
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{ error }}', $e->getMessage())
@@ -73,9 +80,6 @@ class TwigValidator extends ConstraintValidator
                 ->addViolation();
         } finally {
             $this->twig->setLoader($realLoader);
-            if (!$constraint->skipDeprecations) {
-                restore_error_handler();
-            }
         }
     }
 }
