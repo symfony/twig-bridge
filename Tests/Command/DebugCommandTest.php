@@ -304,12 +304,7 @@ TXT
         $environment = new Environment($loader);
 
         $application = new Application();
-        $command = new DebugCommand($environment, $projectDir, [], null, null);
-        if (method_exists($application, 'addCommand')) {
-            $application->addCommand($command);
-        } else {
-            $application->add($command);
-        }
+        $application->addCommand(new DebugCommand($environment, $projectDir, [], null, null));
 
         $tester = new CommandCompletionTester($application->find('debug:twig'));
         $suggestions = $tester->complete($input, 2);
@@ -344,12 +339,7 @@ TXT
         }
 
         $application = new Application();
-        $command = new DebugCommand($environment, $projectDir, $bundleMetadata, $defaultPath, null);
-        if (method_exists($application, 'addCommand')) {
-            $application->addCommand($command);
-        } else {
-            $application->add($command);
-        }
+        $application->addCommand(new DebugCommand($environment, $projectDir, $bundleMetadata, $defaultPath, null));
         $command = $application->find('debug:twig');
 
         return new CommandTester($command);
