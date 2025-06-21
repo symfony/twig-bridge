@@ -129,6 +129,101 @@ HTML;
         $this->assertEquals($expected, $this->render($template));
     }
 
+    /**
+     * @dataProvider fileExcerptIntegrationProvider
+     */
+    public function testFileExcerptIntegration(string $expected, array $data)
+    {
+        $template = <<<'TWIG'
+{{ file_path|file_excerpt(line, src_context) }}
+TWIG;
+        $html = $this->render($template, $data);
+
+        // highlight_file function output changed sing PHP 8.3
+        // see https://github.com/php/php-src/blob/e2667f17bc24e3cd200bb3eda457f566f1f77f8f/UPGRADING#L239-L242
+        if (\PHP_VERSION_ID < 80300) {
+            $html = str_replace('&nbsp;', ' ', $html);
+        }
+
+        $html = html_entity_decode($html);
+
+        $this->assertEquals($expected, $html);
+    }
+
+    public static function fileExcerptIntegrationProvider()
+    {
+        $fixturesPath = \dirname(__DIR__).\DIRECTORY_SEPARATOR.'Fixtures';
+
+        yield 'php file' => [
+            'expected' => <<<'HTML'
+<ol start="1"><li><a class="anchor" id="line1"></a><code><span style="color: #0000BB"><?php</span></code></li>
+<li><a class="anchor" id="line2"></a><code><span style="color: #0000BB"></span></code></li>
+<li><a class="anchor" id="line3"></a><code><span style="color: #0000BB"></span><span style="color: #007700">echo </span><span style="color: #DD0000">'Hello'</span><span style="color: #007700">;</span></code></li>
+<li><a class="anchor" id="line4"></a><code><span style="color: #007700">echo </span><span style="color: #DD0000">'World!'</span><span style="color: #007700">;</span></code></li>
+<li><a class="anchor" id="line5"></a><code><span style="color: #007700"></span></code></li></ol>
+HTML,
+            'data' => [
+                'file_path' => $fixturesPath.\DIRECTORY_SEPARATOR.'hello_world.php',
+                'line' => 0,
+                'src_context' => 3,
+            ],
+        ];
+
+        yield 'php file with selected line and no source context' => [
+            'expected' => <<<'HTML'
+<ol start="1"><li class="selected"><a class="anchor" id="line1"></a><code><span style="color: #0000BB"><?php</span></code></li>
+<li><a class="anchor" id="line2"></a><code><span style="color: #0000BB"></span></code></li>
+<li><a class="anchor" id="line3"></a><code><span style="color: #0000BB"></span><span style="color: #007700">echo </span><span style="color: #DD0000">'Hello'</span><span style="color: #007700">;</span></code></li>
+<li><a class="anchor" id="line4"></a><code><span style="color: #007700">echo </span><span style="color: #DD0000">'World!'</span><span style="color: #007700">;</span></code></li>
+<li><a class="anchor" id="line5"></a><code><span style="color: #007700"></span></code></li></ol>
+HTML,
+            'data' => [
+                'file_path' => $fixturesPath.\DIRECTORY_SEPARATOR.'hello_world.php',
+                'line' => 1,
+                'src_context' => -1,
+            ],
+        ];
+
+        yield 'php file excerpt with selected line and custom source context' => [
+            'expected' => <<<'HTML'
+<ol start="2"><li class="selected"><a class="anchor" id="line3"></a><code><span style="color: #0000BB"></span><span style="color: #007700">echo </span><span style="color: #DD0000">'Hello'</span><span style="color: #007700">;</span></code></li>
+<li><a class="anchor" id="line4"></a><code><span style="color: #007700">echo </span><span style="color: #DD0000">'World!'</span><span style="color: #007700">;</span></code></li>
+<li><a class="anchor" id="line5"></a><code><span style="color: #007700"></span></code></li></ol>
+HTML,
+            'data' => [
+                'file_path' => $fixturesPath.\DIRECTORY_SEPARATOR.'hello_world.php',
+                'line' => 3,
+                'src_context' => 1,
+            ],
+        ];
+
+        yield 'php file excerpt with out of bound selected line' => [
+            'expected' => <<<'HTML'
+<ol start="99"></ol>
+HTML,
+            'data' => [
+                'file_path' => $fixturesPath.\DIRECTORY_SEPARATOR.'hello_world.php',
+                'line' => 100,
+                'src_context' => 1,
+            ],
+        ];
+
+        yield 'json file' => [
+            'expected' => <<<'HTML'
+<ol start="1"><li><a class="anchor" id="line1"></a><code>[</code></li>
+<li><a class="anchor" id="line2"></a><code>  "Hello",</code></li>
+<li><a class="anchor" id="line3"></a><code>  "World!"</code></li>
+<li><a class="anchor" id="line4"></a><code>]</code></li>
+<li><a class="anchor" id="line5"></a><code></code></li></ol>
+HTML,
+            'data' => [
+                'file_path' => $fixturesPath.\DIRECTORY_SEPARATOR.'hello_world.json',
+                'line' => 0,
+                'src_context' => 3,
+            ],
+        ];
+    }
+
     public function testFormatFileFromTextIntegration()
     {
         $template = <<<'TWIG'
