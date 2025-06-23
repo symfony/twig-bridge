@@ -6,6 +6,7 @@ CHANGELOG
 
  * Add `access_decision()` and `access_decision_for_user()` Twig functions
  * Call `form_label_content` inside `button_widget` block to render button label
+ * Add `aria-invalid` and `aria-describedby` attributes to form fields when validation errors are present
 
 7.3
 ---
