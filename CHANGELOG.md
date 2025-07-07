@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+8.0
+---
+
+ * Remove support for passing a tag to the constructor of `FormThemeNode`
+
 7.3
 ---
 
