@@ -36,7 +36,7 @@ class TransNodeTest extends TestCase
         $compiler = new Compiler($env);
 
         $this->assertEquals(
-            sprintf(
+            \sprintf(
                 '%s $this->env->getExtension(\'Symfony\Bridge\Twig\Extension\TranslationExtension\')->trans("trans %%var%%", array_merge(["%%var%%" => %s], %s), "messages");',
                 class_exists(YieldReady::class) ? 'yield' : 'echo',
                 $this->getVariableGetterWithoutStrictCheck('var'),
@@ -48,15 +48,15 @@ class TransNodeTest extends TestCase
 
     protected function getVariableGetterWithoutStrictCheck($name)
     {
-        return sprintf('($context["%s"] ?? null)', $name);
+        return \sprintf('($context["%s"] ?? null)', $name);
     }
 
     protected function getVariableGetterWithStrictCheck($name)
     {
         if (Environment::MAJOR_VERSION >= 2) {
-            return sprintf('(isset($context["%1$s"]) || array_key_exists("%1$s", $context) ? $context["%1$s"] : (function () { throw new %2$s(\'Variable "%1$s" does not exist.\', 0, $this->source); })())', $name, Environment::VERSION_ID >= 20700 ? 'RuntimeError' : 'Twig_Error_Runtime');
+            return \sprintf('(isset($context["%1$s"]) || array_key_exists("%1$s", $context) ? $context["%1$s"] : (function () { throw new %2$s(\'Variable "%1$s" does not exist.\', 0, $this->source); })())', $name, Environment::VERSION_ID >= 20700 ? 'RuntimeError' : 'Twig_Error_Runtime');
         }
 
-        return sprintf('($context["%s"] ?? $this->getContext($context, "%1$s"))', $name);
+        return \sprintf('($context["%s"] ?? $this->getContext($context, "%1$s"))', $name);
     }
 }

@@ -32,7 +32,7 @@ final class StopwatchNode extends Node
     public function __construct(Node $name, Node $body, $var, int $lineno = 0, ?string $tag = null)
     {
         if (!$var instanceof AssignNameExpression && !$var instanceof LocalVariable) {
-            throw new \TypeError(sprintf('Expected an instance of "%s" or "%s", but got "%s".', AssignNameExpression::class, LocalVariable::class, get_debug_type($var)));
+            throw new \TypeError(\sprintf('Expected an instance of "%s" or "%s", but got "%s".', AssignNameExpression::class, LocalVariable::class, get_debug_type($var)));
         }
 
         if (class_exists(FirstClassTwigCallableReady::class)) {
