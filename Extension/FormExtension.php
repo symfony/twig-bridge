@@ -157,7 +157,7 @@ final class FormExtension extends AbstractExtension
                 continue;
             }
 
-            /* @var ChoiceView $choice */
+            /** @var ChoiceView $choice */
             $translatableLabel = $this->createFieldTranslation($choice->label, $choice->labelTranslationParameters, $translationDomain);
             yield $translatableLabel => $choice->value;
         }
