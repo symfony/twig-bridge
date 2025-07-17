@@ -28,7 +28,7 @@
         {{ block('fieldset_form_row') }}
     {%- else -%}
         {%- set widget_attr = {} -%}
-        {%- if help is not empty -%}
+        {%- if help -%}
             {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
         {%- endif -%}
         {%- set row_class = row_class|default(row_attr.class|default('mb-3')) -%}
@@ -72,7 +72,7 @@
 
 {% block fieldset_form_row -%}
     {%- set widget_attr = {} -%}
-    {%- if help is not empty -%}
+    {%- if help -%}
         {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
     {%- endif -%}
     <fieldset{% with {attr: row_attr|merge({class: row_attr.class|default('mb-3')|trim})} %}{{ block('attributes') }}{% endwith %}>

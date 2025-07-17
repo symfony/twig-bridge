@@ -2,7 +2,7 @@
 
 {%- block form_row -%}
     {%- set widget_attr = {} -%}
-    {%- if help is not empty -%}
+    {%- if help -%}
         {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
     {%- endif -%}
     <tr{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>

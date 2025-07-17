@@ -24,7 +24,7 @@ col-sm-2
 
 {% block form_row -%}
     {%- set widget_attr = {} -%}
-    {%- if help is not empty -%}
+    {%- if help -%}
         {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
     {%- endif -%}
     <div{% with {attr: row_attr|merge({class: (row_attr.class|default('') ~ ' form-group' ~ ((not compound or force_error|default(false)) and not valid ? ' has-error'))|trim})} %}{{ block('attributes') }}{% endwith %}>
