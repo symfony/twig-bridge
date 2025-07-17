@@ -28,11 +28,7 @@ class TwigValidatorTest extends ConstraintValidatorTestCase
     {
         $environment = new Environment(new ArrayLoader());
         $environment->addFilter(new TwigFilter('humanize_filter', fn ($v) => $v));
-        if (class_exists(DeprecatedCallableInfo::class)) {
-            $options = ['deprecation_info' => new DeprecatedCallableInfo('foo/bar', '1.1')];
-        } else {
-            $options = ['deprecated' => true];
-        }
+        $options = ['deprecation_info' => new DeprecatedCallableInfo('foo/bar', '1.1')];
 
         $environment->addFilter(new TwigFilter('deprecated_filter', fn ($v) => $v, $options));
 
@@ -85,15 +81,9 @@ class TwigValidatorTest extends ConstraintValidatorTestCase
 
         $this->validator->validate('{{ name|deprecated_filter }}', $constraint);
 
-        $line = 1;
-        $error = 'Twig Filter "deprecated_filter" is deprecated in  at line 1 at line 1.';
-        if (class_exists(DeprecatedCallableInfo::class)) {
-            $line = 0;
-            $error = 'Since foo/bar 1.1: Twig Filter "deprecated_filter" is deprecated.';
-        }
         $this->buildViolation($constraint->message)
-            ->setParameter('{{ error }}', $error)
-            ->setParameter('{{ line }}', $line)
+            ->setParameter('{{ error }}', 'Since foo/bar 1.1: Twig Filter "deprecated_filter" is deprecated.')
+            ->setParameter('{{ line }}', 0)
             ->setCode(Twig::INVALID_TWIG_ERROR)
             ->assertRaised();
     }
