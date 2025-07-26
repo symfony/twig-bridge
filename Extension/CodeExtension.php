@@ -121,39 +121,85 @@ final class CodeExtension extends AbstractExtension
      */
     public function fileExcerpt(string $file, int $line, int $srcContext = 3): ?string
     {
-        if (is_file($file) && is_readable($file)) {
-            // highlight_file could throw warnings
-            // see https://bugs.php.net/25725
-            $code = @highlight_file($file, true);
-            if (\PHP_VERSION_ID >= 80300) {
-                // remove main pre/code tags
-                $code = preg_replace('#^<pre.*?>\s*<code.*?>(.*)</code>\s*</pre>#s', '\\1', $code);
-                // split multiline span tags
-                $code = preg_replace_callback('#<span ([^>]++)>((?:[^<\\n]*+\\n)++[^<]*+)</span>#', function ($m) {
-                    return "<span $m[1]>".str_replace("\n", "</span>\n<span $m[1]>", $m[2]).'</span>';
-                }, $code);
-                $content = explode("\n", $code);
-            } else {
-                // remove main code/span tags
-                $code = preg_replace('#^<code.*?>\s*<span.*?>(.*)</span>\s*</code>#s', '\\1', $code);
-                // split multiline spans
-                $code = preg_replace_callback('#<span ([^>]++)>((?:[^<]*+<br \/>)++[^<]*+)</span>#', fn ($m) => "<span $m[1]>".str_replace('<br />', "</span><br /><span $m[1]>", $m[2]).'</span>', $code);
-                $content = explode('<br />', $code);
-            }
-
-            $lines = [];
-            if (0 > $srcContext) {
-                $srcContext = \count($content);
-            }
-
-            for ($i = max($line - $srcContext, 1), $max = min($line + $srcContext, \count($content)); $i <= $max; ++$i) {
-                $lines[] = '<li'.($i == $line ? ' class="selected"' : '').'><a class="anchor" id="line'.$i.'"></a><code>'.self::fixCodeMarkup($content[$i - 1]).'</code></li>';
-            }
-
-            return '<ol start="'.max($line - $srcContext, 1).'">'.implode("\n", $lines).'</ol>';
+        if (!is_file($file) || !is_readable($file)) {
+            return null;
         }
 
-        return null;
+        $contents = file_get_contents($file);
+
+        if (!str_contains($contents, '<?php') && !str_contains($contents, '<?=')) {
+            $lines = explode("\n", $contents);
+
+            if (0 > $srcContext) {
+                $srcContext = \count($lines);
+            }
+
+            return $this->formatFileExcerpt(
+                $this->extractExcerptLines($lines, $line, $srcContext),
+                $line,
+                $srcContext
+            );
+        }
+
+        // highlight_string could throw warnings
+        // see https://bugs.php.net/25725
+        $code = @highlight_string($contents, true);
+
+        if (\PHP_VERSION_ID >= 80300) {
+            // remove main pre/code tags
+            $code = preg_replace('#^<pre.*?>\s*<code.*?>(.*)</code>\s*</pre>#s', '\\1', $code);
+            // split multiline span tags
+            $code = preg_replace_callback(
+                '#<span ([^>]++)>((?:[^<\\n]*+\\n)++[^<]*+)</span>#',
+                static fn (array $m): string => "<span $m[1]>".str_replace("\n", "</span>\n<span $m[1]>", $m[2]).'</span>',
+                $code
+            );
+            $lines = explode("\n", $code);
+        } else {
+            // remove main code/span tags
+            $code = preg_replace('#^<code.*?>\s*<span.*?>(.*)</span>\s*</code>#s', '\\1', $code);
+            // split multiline spans
+            $code = preg_replace_callback(
+                '#<span ([^>]++)>((?:[^<]*+<br \/>)++[^<]*+)</span>#',
+                static fn (array $m): string => "<span $m[1]>".str_replace('<br />', "</span><br /><span $m[1]>", $m[2]).'</span>',
+                $code
+            );
+            $lines = explode('<br />', $code);
+        }
+
+        if (0 > $srcContext) {
+            $srcContext = \count($lines);
+        }
+
+        return $this->formatFileExcerpt(
+            array_map(
+                self::fixCodeMarkup(...),
+                $this->extractExcerptLines($lines, $line, $srcContext),
+            ),
+            $line,
+            $srcContext
+        );
+    }
+
+    private function extractExcerptLines(array $lines, int $selectedLine, int $srcContext): array
+    {
+        return \array_slice(
+            $lines,
+            max($selectedLine - $srcContext, 0),
+            min($srcContext * 2 + 1, \count($lines) - $selectedLine + $srcContext),
+            true
+        );
+    }
+
+    private function formatFileExcerpt(array $lines, int $selectedLine, int $srcContext): string
+    {
+        $start = max($selectedLine - $srcContext, 1);
+
+        return "<ol start=\"{$start}\">".implode("\n", array_map(
+            static fn (string $line, int $num): string => '<li'.(++$num === $selectedLine ? ' class="selected"' : '')."><a class=\"anchor\" id=\"line{$num}\"></a><code>{$line}</code></li>",
+            $lines,
+            array_keys($lines),
+        )).'</ol>';
     }
 
     /**
@@ -243,7 +289,7 @@ final class CodeExtension extends AbstractExtension
         // missing </span> tag at the end of line
         $opening = strpos($line, '<span');
         $closing = strpos($line, '</span>');
-        if (false !== $opening && (false === $closing || $closing > $opening)) {
+        if (false !== $opening && (false === $closing || $closing < $opening)) {
             $line .= '</span>';
         }
 
