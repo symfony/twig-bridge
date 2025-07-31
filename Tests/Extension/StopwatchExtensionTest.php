@@ -11,6 +11,7 @@
 
 namespace Symfony\Bridge\Twig\Tests\Extension;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Twig\Extension\StopwatchExtension;
 use Symfony\Component\Stopwatch\Stopwatch;
@@ -27,9 +28,7 @@ class StopwatchExtensionTest extends TestCase
         $this->testTiming('{% stopwatch "foo" %}{% endstopwatch "bar" %}', []);
     }
 
-    /**
-     * @dataProvider getTimingTemplates
-     */
+    #[DataProvider('getTimingTemplates')]
     public function testTiming($template, $events)
     {
         $twig = new Environment(new ArrayLoader(['template' => $template]), ['debug' => true, 'cache' => false, 'autoescape' => 'html', 'optimizations' => 0]);

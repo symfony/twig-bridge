@@ -11,6 +11,7 @@
 
 namespace Symfony\Bridge\Twig\Tests\Extension;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bridge\Twig\Test\FormLayoutTestCase;
 use Symfony\Component\Form\Extension\Core\Type\PercentType;
@@ -2711,9 +2712,7 @@ abstract class AbstractLayoutTestCase extends FormLayoutTestCase
         );
     }
 
-    /**
-     * @dataProvider submitFormNoValidateProvider
-     */
+    #[DataProvider('submitFormNoValidateProvider')]
     public function testSubmitFormNoValidate(bool $validate)
     {
         $form = $this->factory->create(SubmitType::class, null, [

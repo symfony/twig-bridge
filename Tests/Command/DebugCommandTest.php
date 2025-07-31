@@ -11,6 +11,7 @@
 
 namespace Symfony\Bridge\Twig\Tests\Command;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Twig\Command\DebugCommand;
 use Symfony\Component\Console\Application;
@@ -72,9 +73,7 @@ class DebugCommandTest extends TestCase
         $this->createCommandTester()->execute(['name' => '@foo']);
     }
 
-    /**
-     * @dataProvider getDebugTemplateNameTestData
-     */
+    #[DataProvider('getDebugTemplateNameTestData')]
     public function testDebugTemplateName(array $input, string $output, array $paths)
     {
         $tester = $this->createCommandTester($paths);
@@ -294,9 +293,7 @@ TXT
         $this->assertNotSame($display1, $display2);
     }
 
-    /**
-     * @dataProvider provideCompletionSuggestions
-     */
+    #[DataProvider('provideCompletionSuggestions')]
     public function testComplete(array $input, array $expectedSuggestions)
     {
         $projectDir = \dirname(__DIR__).\DIRECTORY_SEPARATOR.'Fixtures';

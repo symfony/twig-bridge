@@ -11,6 +11,7 @@
 
 namespace Symfony\Bridge\Twig\Tests\Extension;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
 use Symfony\Component\Translation\Loader\ArrayLoader;
@@ -29,9 +30,7 @@ class TranslationExtensionTest extends TestCase
         $this->assertEquals('Percent: 12% (approx.)', $output);
     }
 
-    /**
-     * @dataProvider getTransTests
-     */
+    #[DataProvider('getTransTests')]
     public function testTrans($template, $expected, array $variables = [])
     {
         if ($expected != $this->getTemplate($template)->render($variables)) {

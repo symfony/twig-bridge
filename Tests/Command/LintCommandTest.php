@@ -11,6 +11,7 @@
 
 namespace Symfony\Bridge\Twig\Tests\Command;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 use PHPUnit\Framework\TestCase;
@@ -113,9 +114,7 @@ class LintCommandTest extends TestCase
         $this->assertStringContainsString('Filter "deprecated_filter" is deprecated', trim($tester->getDisplay()));
     }
 
-    /**
-     * @group tty
-     */
+    #[Group('tty')]
     public function testLintDefaultPaths()
     {
         $tester = $this->createCommandTester();
@@ -152,9 +151,7 @@ class LintCommandTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider provideCompletionSuggestions
-     */
+    #[DataProvider('provideCompletionSuggestions')]
     public function testComplete(array $input, array $expectedSuggestions)
     {
         $tester = new CommandCompletionTester($this->createCommand());
