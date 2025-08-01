@@ -64,7 +64,7 @@ class HttpFoundationExtensionTest extends TestCase
     }
 
     #[DataProvider('getGenerateAbsoluteUrlRequestContextData')]
-    public function testGenerateAbsoluteUrlWithoutRequestAndRequestContext($path)
+    public function testGenerateAbsoluteUrlWithoutRequestAndRequestContext($path, $baseUrl, $host, $scheme, $httpPort, $httpsPort, $expected)
     {
         $extension = new HttpFoundationExtension(new UrlHelper(new RequestStack()));
 
