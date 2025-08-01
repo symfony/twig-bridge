@@ -11,6 +11,8 @@
 
 namespace Symfony\Bridge\Twig\Tests\Command;
 
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Twig\Command\LintCommand;
 use Symfony\Component\Console\Application;
@@ -71,10 +73,10 @@ class LintCommandTest extends TestCase
     }
 
     /**
-     * When deprecations are not reported by the command, the testsuite reporter will catch them so we need to mark the test as legacy.
-     *
-     * @group legacy
+     * When deprecations are not reported by the command, the testsuite reporter will catch them so we need to mark the test as ignoring deprecations.
      */
+    #[IgnoreDeprecations]
+    #[Group('legacy')]
     public function testLintFileWithNotReportedDeprecation()
     {
         $tester = $this->createCommandTester();
