@@ -11,6 +11,7 @@
 
 namespace Symfony\Bridge\Twig\Tests\Validator\Constraints;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 use Symfony\Bridge\Twig\Validator\Constraints\Twig;
@@ -37,9 +38,7 @@ class TwigValidatorTest extends ConstraintValidatorTestCase
         return new TwigValidator($environment);
     }
 
-    /**
-     * @dataProvider getValidValues
-     */
+    #[DataProvider('getValidValues')]
     public function testTwigIsValid($value)
     {
         $this->validator->validate($value, new Twig());
@@ -47,9 +46,7 @@ class TwigValidatorTest extends ConstraintValidatorTestCase
         $this->assertNoViolation();
     }
 
-    /**
-     * @dataProvider getInvalidValues
-     */
+    #[DataProvider('getInvalidValues')]
     public function testInvalidValues($value, $message, $line)
     {
         $constraint = new Twig('myMessageTest');

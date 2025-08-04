@@ -23,6 +23,7 @@ use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
 use Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface;
 use Symfony\Component\HttpKernel\Fragment\FragmentUriGenerator;
 use Twig\Environment;
+use Twig\Error\RuntimeError;
 use Twig\Loader\ArrayLoader;
 use Twig\RuntimeLoader\RuntimeLoaderInterface;
 
@@ -32,7 +33,7 @@ class HttpKernelExtensionTest extends TestCase
     {
         $renderer = $this->getFragmentHandler(new \Exception('foo'));
 
-        $this->expectException(\Twig\Error\RuntimeError::class);
+        $this->expectException(RuntimeError::class);
 
         $this->renderTemplate($renderer);
     }

@@ -11,6 +11,7 @@
 
 namespace Symfony\Bridge\Twig\Tests\Extension;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\PhpUnit\ClassExistsMock;
 use Symfony\Bridge\Twig\Extension\SecurityExtension;
@@ -32,9 +33,7 @@ class SecurityExtensionTest extends TestCase
         ClassExistsMock::withMockedClasses([FieldVote::class => true]);
     }
 
-    /**
-     * @dataProvider provideObjectFieldAclCases
-     */
+    #[DataProvider('provideObjectFieldAclCases')]
     public function testIsGrantedCreatesFieldVoteObjectWhenFieldNotNull($object, $field, $expectedSubject)
     {
         $securityChecker = $this->createMock(AuthorizationCheckerInterface::class);
@@ -65,9 +64,7 @@ class SecurityExtensionTest extends TestCase
         $securityExtension->isGranted('ROLE', 'object', 'bar');
     }
 
-    /**
-     * @dataProvider provideObjectFieldAclCases
-     */
+    #[DataProvider('provideObjectFieldAclCases')]
     public function testIsGrantedForUserCreatesFieldVoteObjectWhenFieldNotNull($object, $field, $expectedSubject)
     {
         if (!interface_exists(UserAuthorizationCheckerInterface::class)) {
