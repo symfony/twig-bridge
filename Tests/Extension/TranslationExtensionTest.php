@@ -18,6 +18,7 @@ use Symfony\Component\Translation\Loader\ArrayLoader;
 use Symfony\Component\Translation\Translator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
+use Twig\Error\SyntaxError;
 use Twig\Loader\ArrayLoader as TwigArrayLoader;
 use Twig\TemplateWrapper;
 
@@ -48,14 +49,14 @@ class TranslationExtensionTest extends TestCase
 
     public function testTransUnknownKeyword()
     {
-        $this->expectException(\Twig\Error\SyntaxError::class);
+        $this->expectException(SyntaxError::class);
         $this->expectExceptionMessage('Unexpected token. Twig was looking for the "with", "from", or "into" keyword in "index" at line 3.');
         $this->getTemplate("{% trans \n\nfoo %}{% endtrans %}")->render();
     }
 
     public function testTransComplexBody()
     {
-        $this->expectException(\Twig\Error\SyntaxError::class);
+        $this->expectException(SyntaxError::class);
         $this->expectExceptionMessage('A message inside a trans tag must be a simple text in "index" at line 2.');
         $this->getTemplate("{% trans %}\n{{ 1 + 2 }}{% endtrans %}")->render();
     }

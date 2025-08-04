@@ -18,13 +18,14 @@ use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\Stopwatch\StopwatchEvent;
 use Twig\Environment;
 use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 use Twig\Loader\ArrayLoader;
 
 class StopwatchExtensionTest extends TestCase
 {
     public function testFailIfStoppingWrongEvent()
     {
-        $this->expectException(\Twig\Error\SyntaxError::class);
+        $this->expectException(SyntaxError::class);
         $this->testTiming('{% stopwatch "foo" %}{% endstopwatch "bar" %}', []);
     }
 
