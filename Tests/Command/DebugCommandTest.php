@@ -112,8 +112,7 @@ class DebugCommandTest extends TestCase
                  ----------- -------------------------------------%A
 
 
-                TXT
-            ,
+                TXT,
             'paths' => ['vendors/twig-bundle/Resources/views/' => 'Twig'],
         ];
 
@@ -141,8 +140,7 @@ class DebugCommandTest extends TestCase
                  ----------- -------------------------------------%A
 
 
-                TXT
-            ,
+                TXT,
             'paths' => $defaultPaths,
         ];
 
@@ -165,8 +163,7 @@ class DebugCommandTest extends TestCase
                  ----------- ------------%A
 
 
-                TXT
-            ,
+                TXT,
             'paths' => $defaultPaths,
         ];
 
@@ -195,8 +192,7 @@ class DebugCommandTest extends TestCase
                  ----------- -------------------------------------- 
 
 
-                TXT
-            ,
+                TXT,
             'paths' => $defaultPaths,
         ];
 
@@ -218,8 +214,7 @@ class DebugCommandTest extends TestCase
                 %w@Twig%A
 
 
-                TXT
-            ,
+                TXT,
             'paths' => $defaultPaths,
         ];
 
@@ -247,8 +242,7 @@ class DebugCommandTest extends TestCase
                  ----------- -------------------------------------- 
 
 
-                TXT
-            ,
+                TXT,
             'paths' => $defaultPaths,
         ];
     }
