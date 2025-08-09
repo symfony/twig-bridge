@@ -95,24 +95,24 @@ class DebugCommandTest extends TestCase
             'input' => ['name' => 'base.html.twig'],
             'output' => <<<TXT
 
-Matched File
-------------
+                Matched File
+                ------------
 
- Template name "base.html.twig" not found%A
+                 Template name "base.html.twig" not found%A
 
-Configured Paths
-----------------
+                Configured Paths
+                ----------------
 
- No template paths configured for your application%s
+                 No template paths configured for your application%s
 
- ----------- -------------------------------------%A
-  Namespace   Paths%A
- ----------- -------------------------------------%A
-  @Twig       vendors/twig-bundle/Resources/views%e%A
- ----------- -------------------------------------%A
+                 ----------- -------------------------------------%A
+                  Namespace   Paths%A
+                 ----------- -------------------------------------%A
+                  @Twig       vendors/twig-bundle/Resources/views%e%A
+                 ----------- -------------------------------------%A
 
 
-TXT
+                TXT
             ,
             'paths' => ['vendors/twig-bundle/Resources/views/' => 'Twig'],
         ];
@@ -121,27 +121,27 @@ TXT
             'input' => ['name' => '@App/foo.html.twig'],
             'output' => <<<TXT
 
-Matched File
-------------
+                Matched File
+                ------------
 
- Template name "@App/foo.html.twig" not found%A
+                 Template name "@App/foo.html.twig" not found%A
 
-Configured Paths
-----------------
+                Configured Paths
+                ----------------
 
- No template paths configured for "@App" namespace%A
+                 No template paths configured for "@App" namespace%A
 
- ----------- -------------------------------------%A
-  Namespace   Paths%A
- ----------- -------------------------------------%A
-  (None)      templates%e%A
-  %A
-  @Twig       templates/bundles/TwigBundle%e%A
-              vendors/twig-bundle/Resources/views%e%A 
- ----------- -------------------------------------%A
+                 ----------- -------------------------------------%A
+                  Namespace   Paths%A
+                 ----------- -------------------------------------%A
+                  (None)      templates%e%A
+                  %A
+                  @Twig       templates/bundles/TwigBundle%e%A
+                              vendors/twig-bundle/Resources/views%e%A 
+                 ----------- -------------------------------------%A
 
 
-TXT
+                TXT
             ,
             'paths' => $defaultPaths,
         ];
@@ -150,22 +150,22 @@ TXT
             'input' => ['name' => 'base.html.twig'],
             'output' => <<<TXT
 
-Matched File
-------------
+                Matched File
+                ------------
 
- [OK] templates%ebase.html.twig%A
+                 [OK] templates%ebase.html.twig%A
 
-Configured Paths
-----------------
+                Configured Paths
+                ----------------
 
- ----------- ------------%A
-  Namespace   Paths%A
- ----------- ------------%A
-  (None)      templates%e%A
- ----------- ------------%A
+                 ----------- ------------%A
+                  Namespace   Paths%A
+                 ----------- ------------%A
+                  (None)      templates%e%A
+                 ----------- ------------%A
 
 
-TXT
+                TXT
             ,
             'paths' => $defaultPaths,
         ];
@@ -174,28 +174,28 @@ TXT
             'input' => ['name' => '@Twig/error.html.twig'],
             'output' => <<<TXT
 
-Matched File
-------------
+                Matched File
+                ------------
 
- [OK] templates%ebundles%eTwigBundle%eerror.html.twig%A
+                 [OK] templates%ebundles%eTwigBundle%eerror.html.twig%A
 
-Overridden Files
-----------------
+                Overridden Files
+                ----------------
 
- * vendors%etwig-bundle%eResources%eviews%eerror.html.twig
+                 * vendors%etwig-bundle%eResources%eviews%eerror.html.twig
 
-Configured Paths
-----------------
+                Configured Paths
+                ----------------
 
- ----------- -------------------------------------- 
-  Namespace   Paths%A
- ----------- -------------------------------------- 
-  @Twig       templates/bundles/TwigBundle%e%A
-              vendors/twig-bundle/Resources/views%e%A
- ----------- -------------------------------------- 
+                 ----------- -------------------------------------- 
+                  Namespace   Paths%A
+                 ----------- -------------------------------------- 
+                  @Twig       templates/bundles/TwigBundle%e%A
+                              vendors/twig-bundle/Resources/views%e%A
+                 ----------- -------------------------------------- 
 
 
-TXT
+                TXT
             ,
             'paths' => $defaultPaths,
         ];
@@ -204,21 +204,21 @@ TXT
             'input' => ['name' => '@Twg/error.html.twig'],
             'output' => <<<TXT
 
-Matched File
-------------
+                Matched File
+                ------------
 
- Template name "@Twg/error.html.twig" not found%A
+                 Template name "@Twg/error.html.twig" not found%A
 
-Configured Paths
-----------------
+                Configured Paths
+                ----------------
 
- No template paths configured for "@Twg" namespace%A
-%A
-%wDid you mean this?%A
-%w@Twig%A
+                 No template paths configured for "@Twg" namespace%A
+                %A
+                %wDid you mean this?%A
+                %w@Twig%A
 
 
-TXT
+                TXT
             ,
             'paths' => $defaultPaths,
         ];
@@ -227,27 +227,27 @@ TXT
             'input' => ['name' => '@Twig/eror.html.twig'],
             'output' => <<<TXT
 
-Matched File
-------------
+                Matched File
+                ------------
 
- Template name "@Twig/eror.html.twig" not found%A
-%A
-%wDid you mean one of these?%A
-%w@Twig/base.html.twig%A
-%w@Twig/error.html.twig%A
+                 Template name "@Twig/eror.html.twig" not found%A
+                %A
+                %wDid you mean one of these?%A
+                %w@Twig/base.html.twig%A
+                %w@Twig/error.html.twig%A
 
-Configured Paths
-----------------
+                Configured Paths
+                ----------------
 
- ----------- -------------------------------------- 
-  Namespace   Paths                                 
- ----------- -------------------------------------- 
-  @Twig       templates/bundles/TwigBundle%e%A
-              vendors/twig-bundle/Resources/views%e%A
- ----------- -------------------------------------- 
+                 ----------- -------------------------------------- 
+                  Namespace   Paths                                 
+                 ----------- -------------------------------------- 
+                  @Twig       templates/bundles/TwigBundle%e%A
+                              vendors/twig-bundle/Resources/views%e%A
+                 ----------- -------------------------------------- 
 
 
-TXT
+                TXT
             ,
             'paths' => $defaultPaths,
         ];
