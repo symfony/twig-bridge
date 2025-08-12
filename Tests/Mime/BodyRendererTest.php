@@ -55,13 +55,13 @@ class BodyRendererTest extends TestCase
     public function testRenderMultiLineHtmlOnly()
     {
         $html = <<<HTML
-<head>
-<style type="text/css">
-css
-</style>
-</head>
-<b>HTML</b>
-HTML;
+            <head>
+            <style type="text/css">
+            css
+            </style>
+            </head>
+            <b>HTML</b>
+            HTML;
         $email = $this->prepareEmail(null, $html);
         $body = $email->getBody();
         $this->assertInstanceOf(AlternativePart::class, $body);
