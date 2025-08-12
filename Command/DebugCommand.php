@@ -60,25 +60,25 @@ class DebugCommand extends Command
                 new InputOption('format', null, InputOption::VALUE_REQUIRED, \sprintf('The output format ("%s")', implode('", "', $this->getAvailableFormatOptions())), 'txt'),
             ])
             ->setHelp(<<<'EOF'
-The <info>%command.name%</info> command outputs a list of twig functions,
-filters, globals and tests.
+                The <info>%command.name%</info> command outputs a list of twig functions,
+                filters, globals and tests.
 
-  <info>php %command.full_name%</info>
+                  <info>php %command.full_name%</info>
 
-The command lists all functions, filters, etc.
+                The command lists all functions, filters, etc.
 
-  <info>php %command.full_name% @Twig/Exception/error.html.twig</info>
+                  <info>php %command.full_name% @Twig/Exception/error.html.twig</info>
 
-The command lists all paths that match the given template name.
+                The command lists all paths that match the given template name.
 
-  <info>php %command.full_name% --filter=date</info>
+                  <info>php %command.full_name% --filter=date</info>
 
-The command lists everything that contains the word date.
+                The command lists everything that contains the word date.
 
-  <info>php %command.full_name% --format=json</info>
+                  <info>php %command.full_name% --format=json</info>
 
-The command lists everything in a machine readable json format.
-EOF
+                The command lists everything in a machine readable json format.
+                EOF
             )
         ;
     }
