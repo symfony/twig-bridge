@@ -77,8 +77,9 @@ class FormExtensionBootstrap4LayoutTest extends AbstractBootstrap4LayoutTestCase
             <div class="input-group "><div class="input-group-prepend">
                                 <span class="input-group-text">&euro; </span>
                             </div><input type="text" id="name" name="name" required="required" class="form-control" /></div>
-            HTML
-            , trim($this->renderWidget($view)));
+            HTML,
+            trim($this->renderWidget($view))
+        );
     }
 
     protected function getTemplatePaths(): array
