@@ -70,8 +70,10 @@ class HttpKernelExtensionTest extends TestCase
         $loader = new ArrayLoader([
             'index' => \sprintf(<<<TWIG
                 {{ fragment_uri(controller("%s::templateAction", {template: "foo.html.twig"})) }}
-                TWIG
-                , str_replace('\\', '\\\\', TemplateController::class)), ]);
+                TWIG,
+                str_replace('\\', '\\\\', TemplateController::class)
+            ),
+        ]);
         $twig = new Environment($loader, ['debug' => true, 'cache' => false]);
         $twig->addExtension(new HttpKernelExtension());
 
