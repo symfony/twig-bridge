@@ -30,7 +30,7 @@ class SecurityExtensionTest extends TestCase
 
     protected function tearDown(): void
     {
-        ClassExistsMock::withMockedClasses([FieldVote::class => true]);
+        ClassExistsMock::withMockedClasses([FieldVote::class => true, AccessDecision::class => true]);
     }
 
     #[DataProvider('provideObjectFieldAclCases')]
@@ -115,6 +115,122 @@ class SecurityExtensionTest extends TestCase
         $securityExtension->isGrantedForUser($this->createMock(UserInterface::class), 'ROLE', 'object', 'bar');
     }
 
+    public function testAccessDecision()
+    {
+        if (!class_exists(AccessDecision::class)) {
+            $this->markTestSkipped('This test requires symfony/security-core 7.3 or superior.');
+        }
+
+        $securityChecker = $this->createMock(AuthorizationCheckerInterface::class);
+        $securityChecker
+            ->expects($this->once())
+            ->method('isGranted')
+            ->with('ROLE', 'object', $this->isInstanceOf(AccessDecision::class))
+            ->willReturnCallback(function ($attribute, $subject, $accessDecision) {
+                $accessDecision->isGranted = true;
+
+                return true;
+            });
+
+        $securityExtension = new SecurityExtension($securityChecker);
+        $accessDecision = $securityExtension->getAccessDecision('ROLE', 'object');
+
+        $this->assertInstanceOf(AccessDecision::class, $accessDecision);
+        $this->assertTrue($accessDecision->isGranted);
+    }
+
+    public function testAccessDecisionWithField()
+    {
+        if (!class_exists(AccessDecision::class)) {
+            $this->markTestSkipped('This test requires symfony/security-core 7.3 or superior.');
+        }
+
+        $securityChecker = $this->createMock(AuthorizationCheckerInterface::class);
+        $securityChecker
+            ->expects($this->once())
+            ->method('isGranted')
+            ->with('ROLE', $this->isInstanceOf(FieldVote::class), $this->isInstanceOf(AccessDecision::class))
+            ->willReturnCallback(function ($attribute, $subject, $accessDecision) {
+                $accessDecision->isGranted = false;
+
+                return false;
+            });
+
+        $securityExtension = new SecurityExtension($securityChecker);
+        $accessDecision = $securityExtension->getAccessDecision('ROLE', 'object', 'field');
+
+        $this->assertInstanceOf(AccessDecision::class, $accessDecision);
+        $this->assertFalse($accessDecision->isGranted);
+    }
+
+    public function testAccessDecisionThrowsWhenAccessDecisionClassDoesNotExist()
+    {
+        ClassExistsMock::withMockedClasses([AccessDecision::class => false]);
+
+        $securityChecker = $this->createMock(AuthorizationCheckerInterface::class);
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Using the "access_decision()" function requires symfony/security-core >= 7.3. Try running "composer update symfony/security-core".');
+
+        $securityExtension = new SecurityExtension($securityChecker);
+        $securityExtension->getAccessDecision('ROLE', 'object');
+    }
+
+    public function testAccessDecisionForUser()
+    {
+        if (!interface_exists(UserAuthorizationCheckerInterface::class) || !class_exists(AccessDecision::class)) {
+            $this->markTestSkipped('This test requires symfony/security-core 7.3 or superior.');
+        }
+
+        $user = $this->createMock(UserInterface::class);
+        $securityChecker = $this->createMockAuthorizationChecker();
+
+        $securityExtension = new SecurityExtension($securityChecker);
+        $accessDecision = $securityExtension->getAccessDecisionForUser($user, 'ROLE', 'object');
+
+        $this->assertInstanceOf(AccessDecision::class, $accessDecision);
+        $this->assertTrue($accessDecision->isGranted);
+        $this->assertSame($user, $securityChecker->user);
+        $this->assertSame('ROLE', $securityChecker->attribute);
+        $this->assertSame('object', $securityChecker->subject);
+    }
+
+    public function testAccessDecisionForUserWithField()
+    {
+        if (!interface_exists(UserAuthorizationCheckerInterface::class) || !class_exists(AccessDecision::class)) {
+            $this->markTestSkipped('This test requires symfony/security-core 7.3 or superior.');
+        }
+
+        $user = $this->createMock(UserInterface::class);
+        $securityChecker = $this->createMockAuthorizationChecker();
+
+        $securityExtension = new SecurityExtension($securityChecker);
+        $accessDecision = $securityExtension->getAccessDecisionForUser($user, 'ROLE', 'object', 'field');
+
+        $this->assertInstanceOf(AccessDecision::class, $accessDecision);
+        $this->assertTrue($accessDecision->isGranted);
+        $this->assertSame($user, $securityChecker->user);
+        $this->assertSame('ROLE', $securityChecker->attribute);
+        $this->assertEquals(new FieldVote('object', 'field'), $securityChecker->subject);
+    }
+
+    public function testAccessDecisionForUserThrowsWhenAccessDecisionClassDoesNotExist()
+    {
+        if (!interface_exists(UserAuthorizationCheckerInterface::class)) {
+            $this->markTestSkipped('This test requires symfony/security-core 7.3 or superior.');
+        }
+
+        ClassExistsMock::withMockedClasses([AccessDecision::class => false]);
+
+        $securityChecker = $this->createMockAuthorizationChecker();
+        $securityExtension = new SecurityExtension($securityChecker);
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Using the "access_decision_for_user()" function requires symfony/security-core >= 7.3. Try running "composer update symfony/security-core".');
+
+        $securityExtension->getAccessDecisionForUser($this->createMock(UserInterface::class), 'ROLE', 'object');
+    }
+
     private function createMockAuthorizationChecker(): AuthorizationCheckerInterface&UserAuthorizationCheckerInterface
     {
         return new class implements AuthorizationCheckerInterface, UserAuthorizationCheckerInterface {
@@ -132,6 +248,10 @@ class SecurityExtensionTest extends TestCase
                 $this->user = $user;
                 $this->attribute = $attribute;
                 $this->subject = $subject;
+
+                if ($accessDecision) {
+                    $accessDecision->isGranted = true;
+                }
 
                 return true;
             }

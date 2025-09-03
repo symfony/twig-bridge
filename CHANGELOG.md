@@ -6,6 +6,11 @@ CHANGELOG
 
  * Remove support for passing a tag to the constructor of `FormThemeNode`
 
+7.4
+---
+
+ * Add `access_decision()` and `access_decision_for_user()` Twig functions
+
 7.3
 ---
 
