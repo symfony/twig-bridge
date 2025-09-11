@@ -226,30 +226,8 @@
 {%- endblock range_widget %}
 
 {%- block button_widget -%}
-    {%- if not label -%}
-        {%- if label_format is not empty -%}
-            {% set label = label_format|replace({
-                '%name%': name,
-                '%id%': id,
-            }) %}
-        {%- elseif label is not same as(false) -%}
-            {% set label = name|humanize %}
-        {%- endif -%}
-    {%- endif -%}
     <button type="{{ type|default('button') }}" {{ block('button_attributes') }}>
-        {%- if translation_domain is same as(false) -%}
-            {%- if label_html is same as(false) -%}
-                {{- label -}}
-            {%- else -%}
-                {{- label|raw -}}
-            {%- endif -%}
-        {%- else -%}
-            {%- if label_html is same as(false) -%}
-                {{- label|trans(label_translation_parameters, translation_domain) -}}
-            {%- else -%}
-                {{- label|trans(label_translation_parameters, translation_domain)|raw -}}
-            {%- endif -%}
-        {%- endif -%}
+        {{- block('form_label_content') -}}
     </button>
 {%- endblock button_widget -%}
 
