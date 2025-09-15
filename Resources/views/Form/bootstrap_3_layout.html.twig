@@ -1,4 +1,4 @@
-{% use "bootstrap_base_layout.html.twig" %}
+{% use 'bootstrap_base_layout.html.twig' %}
 
 {# Widgets #}
 
@@ -35,10 +35,10 @@
 {% block checkbox_widget -%}
     {%- set parent_label_class = parent_label_class|default(label_attr.class|default('')) -%}
     {% if 'checkbox-inline' in parent_label_class %}
-        {{- form_label(form, null, { widget: parent() }) -}}
+        {{- form_label(form, null, {widget: parent()}) -}}
     {% else -%}
         <div class="checkbox">
-            {{- form_label(form, null, { widget: parent() }) -}}
+            {{- form_label(form, null, {widget: parent()}) -}}
         </div>
     {%- endif -%}
 {%- endblock checkbox_widget %}
@@ -46,10 +46,10 @@
 {% block radio_widget -%}
     {%- set parent_label_class = parent_label_class|default(label_attr.class|default('')) -%}
     {%- if 'radio-inline' in parent_label_class -%}
-        {{- form_label(form, null, { widget: parent() }) -}}
+        {{- form_label(form, null, {widget: parent()}) -}}
     {%- else -%}
         <div class="radio">
-            {{- form_label(form, null, { widget: parent() }) -}}
+            {{- form_label(form, null, {widget: parent()}) -}}
         </div>
     {%- endif -%}
 {%- endblock radio_widget %}
@@ -73,13 +73,13 @@
 {% endblock %}
 
 {% block checkbox_label -%}
-    {%- set label_attr = label_attr|merge({'for': id}) -%}
+    {%- set label_attr = label_attr|merge({for: id}) -%}
 
     {{- block('checkbox_radio_label') -}}
 {%- endblock checkbox_label %}
 
 {% block radio_label -%}
-    {%- set label_attr = label_attr|merge({'for': id}) -%}
+    {%- set label_attr = label_attr|merge({for: id}) -%}
 
     {{- block('checkbox_radio_label') -}}
 {%- endblock radio_label %}
@@ -104,7 +104,7 @@
                 {% set label = name|humanize %}
             {%- endif -%}
         {%- endif -%}
-        <label{% with { attr: label_attr } %}{{ block('attributes') }}{% endwith %}>
+        <label{% with {attr: label_attr} %}{{ block('attributes') }}{% endwith %}>
             {#- if statement must be kept on the same line, to force the space between widget and label -#}
             {{- widget|raw }} {% if label is not same as(false) -%}
                 {%- if translation_domain is same as(false) -%}
@@ -130,7 +130,7 @@
 {% block form_row -%}
     {%- set widget_attr = {} -%}
     {%- if help -%}
-        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~ '_help'}} -%}
     {%- endif -%}
     <div{% with {attr: row_attr|merge({class: (row_attr.class|default('') ~ ' form-group' ~ ((not compound or force_error|default(false)) and not valid ? ' has-error'))|trim})} %}{{ block('attributes') }}{% endwith %}>
         {{- form_label(form) }} {# -#}
@@ -201,7 +201,7 @@
 {% block form_help -%}
     {%- if help -%}
         {%- set help_attr = help_attr|merge({class: (help_attr.class|default('') ~ ' help-block')|trim}) -%}
-        <span id="{{ id }}_help"{% with { attr: help_attr } %}{{ block('attributes') }}{% endwith %}>
+        <span id="{{ id }}_help"{% with {attr: help_attr} %}{{ block('attributes') }}{% endwith %}>
             {%- if translation_domain is same as(false) -%}
                 {%- if help_html is same as(false) -%}
                     {{- help -}}

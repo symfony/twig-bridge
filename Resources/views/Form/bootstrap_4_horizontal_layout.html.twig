@@ -1,4 +1,4 @@
-{% use "bootstrap_4_layout.html.twig" %}
+{% use 'bootstrap_4_layout.html.twig' %}
 
 {# Labels #}
 
@@ -26,7 +26,7 @@ col-sm-2
     {%- else -%}
     {%- set widget_attr = {} -%}
     {%- if help -%}
-        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~ '_help'}} -%}
     {%- endif -%}
         <div{% with {attr: row_attr|merge({class: (row_attr.class|default('') ~ ' form-group row' ~ ((not compound or force_error|default(false)) and not valid ? ' is-invalid'))|trim})} %}{{ block('attributes') }}{% endwith %}>
             {{- form_label(form) -}}
@@ -41,7 +41,7 @@ col-sm-2
 {% block fieldset_form_row -%}
     {%- set widget_attr = {} -%}
     {%- if help -%}
-        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~ '_help'}} -%}
     {%- endif -%}
     <fieldset{% with {attr: row_attr|merge({class: (row_attr.class|default('') ~ ' form-group')|trim})} %}{{ block('attributes') }}{% endwith %}>
         <div class="row{% if (not compound or force_error|default(false)) and not valid %} is-invalid{% endif %}">

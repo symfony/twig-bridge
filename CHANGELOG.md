@@ -10,6 +10,7 @@ CHANGELOG
 ---
 
  * Add `access_decision()` and `access_decision_for_user()` Twig functions
+ * Call `form_label_content` inside `button_widget` block to render button label
 
 7.3
 ---
