@@ -12,7 +12,6 @@
 namespace Symfony\Bridge\Twig\Tests\Validator\Constraints;
 
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 use Symfony\Bridge\Twig\Validator\Constraints\Twig;
 use Symfony\Bridge\Twig\Validator\Constraints\TwigValidator;
@@ -68,7 +67,6 @@ class TwigValidatorTest extends ConstraintValidatorTestCase
      * When deprecations are skipped by the validator, the testsuite reporter will catch them so we need to mark the test as ignoring deprecations.
      */
     #[IgnoreDeprecations]
-    #[Group('legacy')]
     public function testTwigWithSkipDeprecation()
     {
         $constraint = new Twig(skipDeprecations: true);
