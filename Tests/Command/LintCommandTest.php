@@ -77,7 +77,6 @@ class LintCommandTest extends TestCase
      * When deprecations are not reported by the command, the testsuite reporter will catch them so we need to mark the test as ignoring deprecations.
      */
     #[IgnoreDeprecations]
-    #[Group('legacy')]
     public function testLintFileWithNotReportedDeprecation()
     {
         $tester = $this->createCommandTester();
