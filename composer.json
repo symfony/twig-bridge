@@ -30,7 +30,7 @@
         "symfony/dependency-injection": "^6.4|^7.0|^8.0",
         "symfony/emoji": "^7.1|^8.0",
         "symfony/finder": "^6.4|^7.0|^8.0",
-        "symfony/form": "^6.4.20|^7.2.5|^8.0",
+        "symfony/form": "^6.4.30|~7.3.8|^7.4.1|^8.0.1",
         "symfony/html-sanitizer": "^6.4|^7.0|^8.0",
         "symfony/http-foundation": "^7.3|^8.0",
         "symfony/http-kernel": "^6.4|^7.0|^8.0",
