@@ -285,7 +285,7 @@
                 '%name%': name,
                 '%id%': id,
             }) %}
-        {%- else -%}
+        {%- elseif 'button' not in block_prefixes or label is not same as(false) -%}
             {% set label = name|humanize %}
         {%- endif -%}
     {%- endif -%}
