@@ -18,6 +18,7 @@ use Symfony\Component\Security\Acl\Voter\FieldVote;
 use Symfony\Component\Security\Core\Authorization\AccessDecision;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authorization\UserAuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\User\InMemoryUser;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class SecurityExtensionTest extends TestCase
@@ -54,14 +55,12 @@ class SecurityExtensionTest extends TestCase
             $this->markTestSkipped('This test requires symfony/security-core 7.3 or superior.');
         }
 
-        $securityChecker = $this->createMock(AuthorizationCheckerInterface::class);
-
         ClassExistsMock::withMockedClasses([FieldVote::class => false]);
 
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('Passing a $field to the "is_granted()" function requires symfony/acl.');
 
-        $securityExtension = new SecurityExtension($securityChecker);
+        $securityExtension = new SecurityExtension($this->createStub(AuthorizationCheckerInterface::class));
         $securityExtension->isGranted('ROLE', 'object', 'bar');
     }
 
@@ -74,7 +73,7 @@ class SecurityExtensionTest extends TestCase
             $this->markTestSkipped('This test requires symfony/security-core 7.3 or superior.');
         }
 
-        $user = $this->createMock(UserInterface::class);
+        $user = new InMemoryUser('john', 'password');
         $securityChecker = $this->createMockAuthorizationChecker();
 
         $securityExtension = new SecurityExtension($securityChecker);
@@ -115,7 +114,7 @@ class SecurityExtensionTest extends TestCase
         $this->expectExceptionMessage('Passing a $field to the "is_granted_for_user()" function requires symfony/acl.');
 
         $securityExtension = new SecurityExtension($securityChecker);
-        $securityExtension->isGrantedForUser($this->createMock(UserInterface::class), 'ROLE', 'object', 'bar');
+        $securityExtension->isGrantedForUser(new InMemoryUser('john', 'password'), 'ROLE', 'object', 'bar');
     }
 
     private function createMockAuthorizationChecker(): AuthorizationCheckerInterface&UserAuthorizationCheckerInterface

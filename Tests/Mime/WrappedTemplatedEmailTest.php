@@ -16,6 +16,7 @@ use Symfony\Bridge\Twig\Mime\BodyRenderer;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bridge\Twig\Mime\WrappedTemplatedEmail;
 use Twig\Environment;
+use Twig\Loader\ArrayLoader;
 use Twig\Loader\FilesystemLoader;
 
 /**
@@ -103,18 +104,16 @@ class WrappedTemplatedEmailTest extends TestCase
 
     public function testGetReturnPathWhenNull()
     {
-        $twig = $this->createMock(Environment::class);
         $message = new TemplatedEmail();
-        $email = new WrappedTemplatedEmail($twig, $message);
+        $email = new WrappedTemplatedEmail(new Environment(new ArrayLoader()), $message);
 
         $this->assertSame('', $email->getReturnPath());
     }
 
     public function testGetReturnPathWhenSet()
     {
-        $twig = $this->createMock(Environment::class);
         $message = (new TemplatedEmail())->returnPath('test@example.com');
-        $email = new WrappedTemplatedEmail($twig, $message);
+        $email = new WrappedTemplatedEmail(new Environment(new ArrayLoader()), $message);
 
         $this->assertSame('test@example.com', $email->getReturnPath());
     }

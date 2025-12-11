@@ -74,7 +74,7 @@ class TemplateAttributeListenerTest extends TestCase
         ]));
 
         $request = new Request();
-        $kernel = $this->createMock(HttpKernelInterface::class);
+        $kernel = $this->createStub(HttpKernelInterface::class);
         $controllerArgumentsEvent = new ControllerArgumentsEvent($kernel, [new TemplateAttributeController(), 'foo'], ['Bar'], $request, null);
         $listener = new TemplateAttributeListener($twig);
 
