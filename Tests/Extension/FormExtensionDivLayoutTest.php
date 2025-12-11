@@ -18,7 +18,7 @@ use Symfony\Bridge\Twig\Tests\Extension\Fixtures\StubTranslator;
 use Symfony\Component\Form\ChoiceList\View\ChoiceView;
 use Symfony\Component\Form\FormRenderer;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Symfony\Component\Security\Csrf\CsrfTokenManager;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -148,7 +148,7 @@ class FormExtensionDivLayoutTest extends AbstractDivLayoutTestCase
             'form_div_layout.html.twig',
             'custom_widgets.html.twig',
         ], $environment);
-        $this->renderer = new FormRenderer($rendererEngine, $this->createMock(CsrfTokenManagerInterface::class));
+        $this->renderer = new FormRenderer($rendererEngine, new CsrfTokenManager());
         $this->registerTwigRuntimeLoader($environment, $this->renderer);
 
         $view = $this->factory

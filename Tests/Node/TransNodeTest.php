@@ -16,7 +16,7 @@ use Symfony\Bridge\Twig\Node\TransNode;
 use Twig\Attribute\YieldReady;
 use Twig\Compiler;
 use Twig\Environment;
-use Twig\Loader\LoaderInterface;
+use Twig\Loader\ArrayLoader;
 use Twig\Node\Expression\NameExpression;
 use Twig\Node\Expression\Variable\ContextVariable;
 use Twig\Node\TextNode;
@@ -32,7 +32,7 @@ class TransNodeTest extends TestCase
         $vars = class_exists(ContextVariable::class) ? new ContextVariable('foo', 0) : new NameExpression('foo', 0);
         $node = new TransNode($body, null, null, $vars);
 
-        $env = new Environment($this->createMock(LoaderInterface::class), ['strict_variables' => true]);
+        $env = new Environment(new ArrayLoader(), ['strict_variables' => true]);
         $compiler = new Compiler($env);
 
         $this->assertEquals(

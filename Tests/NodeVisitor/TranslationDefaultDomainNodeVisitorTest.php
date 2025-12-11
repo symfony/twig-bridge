@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Twig\NodeVisitor\TranslationDefaultDomainNodeVisitor;
 use Symfony\Bridge\Twig\NodeVisitor\TranslationNodeVisitor;
 use Twig\Environment;
-use Twig\Loader\LoaderInterface;
+use Twig\Loader\ArrayLoader;
 use Twig\Node\Expression\ArrayExpression;
 use Twig\Node\Node;
 
@@ -27,7 +27,7 @@ class TranslationDefaultDomainNodeVisitorTest extends TestCase
     /** @dataProvider getDefaultDomainAssignmentTestData */
     public function testDefaultDomainAssignment(Node $node)
     {
-        $env = new Environment($this->createMock(LoaderInterface::class), ['cache' => false, 'autoescape' => false, 'optimizations' => 0]);
+        $env = new Environment(new ArrayLoader(), ['cache' => false, 'autoescape' => false, 'optimizations' => 0]);
         $visitor = new TranslationDefaultDomainNodeVisitor();
 
         // visit trans_default_domain tag
@@ -53,7 +53,7 @@ class TranslationDefaultDomainNodeVisitorTest extends TestCase
     /** @dataProvider getDefaultDomainAssignmentTestData */
     public function testNewModuleWithoutDefaultDomainTag(Node $node)
     {
-        $env = new Environment($this->createMock(LoaderInterface::class), ['cache' => false, 'autoescape' => false, 'optimizations' => 0]);
+        $env = new Environment(new ArrayLoader(), ['cache' => false, 'autoescape' => false, 'optimizations' => 0]);
         $visitor = new TranslationDefaultDomainNodeVisitor();
 
         // visit trans_default_domain tag

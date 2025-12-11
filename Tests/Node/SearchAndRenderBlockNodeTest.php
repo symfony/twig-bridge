@@ -17,7 +17,7 @@ use Twig\Attribute\FirstClassTwigCallableReady;
 use Twig\Compiler;
 use Twig\Environment;
 use Twig\Extension\CoreExtension;
-use Twig\Loader\LoaderInterface;
+use Twig\Loader\ArrayLoader;
 use Twig\Node\Expression\ArrayExpression;
 use Twig\Node\Expression\ConditionalExpression;
 use Twig\Node\Expression\ConstantExpression;
@@ -48,7 +48,7 @@ class SearchAndRenderBlockNodeTest extends TestCase
             $node = new SearchAndRenderBlockNode('form_widget', $arguments, 0);
         }
 
-        $compiler = new Compiler(new Environment($this->createMock(LoaderInterface::class)));
+        $compiler = new Compiler(new Environment(new ArrayLoader()));
 
         $this->assertEquals(
             \sprintf(
@@ -85,7 +85,7 @@ class SearchAndRenderBlockNodeTest extends TestCase
             $node = new SearchAndRenderBlockNode('form_widget', $arguments, 0);
         }
 
-        $compiler = new Compiler(new Environment($this->createMock(LoaderInterface::class)));
+        $compiler = new Compiler(new Environment(new ArrayLoader()));
 
         $this->assertEquals(
             \sprintf(
@@ -116,7 +116,7 @@ class SearchAndRenderBlockNodeTest extends TestCase
             $node = new SearchAndRenderBlockNode('form_label', $arguments, 0);
         }
 
-        $compiler = new Compiler(new Environment($this->createMock(LoaderInterface::class)));
+        $compiler = new Compiler(new Environment(new ArrayLoader()));
 
         $this->assertEquals(
             \sprintf(
@@ -147,7 +147,7 @@ class SearchAndRenderBlockNodeTest extends TestCase
             $node = new SearchAndRenderBlockNode('form_label', $arguments, 0);
         }
 
-        $compiler = new Compiler(new Environment($this->createMock(LoaderInterface::class)));
+        $compiler = new Compiler(new Environment(new ArrayLoader()));
 
         // "label" => null must not be included in the output!
         // Otherwise the default label is overwritten with null.
@@ -180,7 +180,7 @@ class SearchAndRenderBlockNodeTest extends TestCase
             $node = new SearchAndRenderBlockNode('form_label', $arguments, 0);
         }
 
-        $compiler = new Compiler(new Environment($this->createMock(LoaderInterface::class)));
+        $compiler = new Compiler(new Environment(new ArrayLoader()));
 
         // "label" => null must not be included in the output!
         // Otherwise the default label is overwritten with null.
@@ -211,7 +211,7 @@ class SearchAndRenderBlockNodeTest extends TestCase
             $node = new SearchAndRenderBlockNode('form_label', $arguments, 0);
         }
 
-        $compiler = new Compiler(new Environment($this->createMock(LoaderInterface::class)));
+        $compiler = new Compiler(new Environment(new ArrayLoader()));
 
         $this->assertEquals(
             \sprintf(
@@ -250,7 +250,7 @@ class SearchAndRenderBlockNodeTest extends TestCase
             $node = new SearchAndRenderBlockNode('form_label', $arguments, 0);
         }
 
-        $compiler = new Compiler(new Environment($this->createMock(LoaderInterface::class)));
+        $compiler = new Compiler(new Environment(new ArrayLoader()));
 
         // "label" => null must not be included in the output!
         // Otherwise the default label is overwritten with null.
@@ -296,7 +296,7 @@ class SearchAndRenderBlockNodeTest extends TestCase
             $node = new SearchAndRenderBlockNode('form_label', $arguments, 0);
         }
 
-        $compiler = new Compiler(new Environment($this->createMock(LoaderInterface::class)));
+        $compiler = new Compiler(new Environment(new ArrayLoader()));
 
         $this->assertEquals(
             \sprintf(
@@ -343,7 +343,7 @@ class SearchAndRenderBlockNodeTest extends TestCase
             $node = new SearchAndRenderBlockNode('form_label', $arguments, 0);
         }
 
-        $compiler = new Compiler(new Environment($this->createMock(LoaderInterface::class)));
+        $compiler = new Compiler(new Environment(new ArrayLoader()));
 
         // "label" => null must not be included in the output!
         // Otherwise the default label is overwritten with null.
@@ -412,7 +412,7 @@ class SearchAndRenderBlockNodeTest extends TestCase
             $node = new SearchAndRenderBlockNode('form_label', $arguments, 0);
         }
 
-        $compiler = new Compiler(new Environment($this->createMock(LoaderInterface::class)));
+        $compiler = new Compiler(new Environment(new ArrayLoader()));
 
         // "label" => null must not be included in the output!
         // Otherwise the default label is overwritten with null.
