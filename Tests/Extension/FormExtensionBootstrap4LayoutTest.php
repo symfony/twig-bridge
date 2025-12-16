@@ -16,7 +16,7 @@ use Symfony\Bridge\Twig\Extension\TranslationExtension;
 use Symfony\Bridge\Twig\Form\TwigRendererEngine;
 use Symfony\Bridge\Twig\Tests\Extension\Fixtures\StubTranslator;
 use Symfony\Component\Form\FormRenderer;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Symfony\Component\Security\Csrf\CsrfTokenManager;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -65,7 +65,7 @@ class FormExtensionBootstrap4LayoutTest extends AbstractBootstrap4LayoutTestCase
             'bootstrap_4_layout.html.twig',
             'custom_widgets.html.twig',
         ], $environment);
-        $this->renderer = new FormRenderer($rendererEngine, $this->createMock(CsrfTokenManagerInterface::class));
+        $this->renderer = new FormRenderer($rendererEngine, new CsrfTokenManager());
         $this->registerTwigRuntimeLoader($environment, $this->renderer);
 
         $view = $this->factory

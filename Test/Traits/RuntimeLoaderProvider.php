@@ -11,9 +11,10 @@
 
 namespace Symfony\Bridge\Twig\Test\Traits;
 
+use Symfony\Component\DependencyInjection\ServiceLocator;
 use Symfony\Component\Form\FormRenderer;
 use Twig\Environment;
-use Twig\RuntimeLoader\RuntimeLoaderInterface;
+use Twig\RuntimeLoader\ContainerRuntimeLoader;
 
 trait RuntimeLoaderProvider
 {
@@ -22,10 +23,8 @@ trait RuntimeLoaderProvider
      */
     protected function registerTwigRuntimeLoader(Environment $environment, FormRenderer $renderer)
     {
-        $loader = $this->createMock(RuntimeLoaderInterface::class);
-        $loader->expects($this->any())->method('load')->willReturnMap([
-            ['Symfony\Component\Form\FormRenderer', $renderer],
-        ]);
-        $environment->addRuntimeLoader($loader);
+        $environment->addRuntimeLoader(new ContainerRuntimeLoader(new ServiceLocator([
+            FormRenderer::class => fn () => $renderer,
+        ])));
     }
 }
