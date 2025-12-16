@@ -45,7 +45,7 @@ class TemplateAttributeListenerTest extends TestCase
         ;
 
         $request = new Request();
-        $kernel = $this->createMock(HttpKernelInterface::class);
+        $kernel = $this->createStub(HttpKernelInterface::class);
         $controllerArgumentsEvent = new ControllerArgumentsEvent($kernel, [new TemplateAttributeController(), 'foo'], ['Bar'], $request, null);
         $listener = new TemplateAttributeListener($twig);
 
@@ -97,9 +97,11 @@ class TemplateAttributeListenerTest extends TestCase
     public function testForm()
     {
         $request = new Request();
-        $kernel = $this->createMock(HttpKernelInterface::class);
+        $kernel = $this->createStub(HttpKernelInterface::class);
         $controllerArgumentsEvent = new ControllerArgumentsEvent($kernel, [new TemplateAttributeController(), 'foo'], [], $request, null);
-        $listener = new TemplateAttributeListener($this->createMock(Environment::class));
+        $listener = new TemplateAttributeListener(new Environment(new ArrayLoader([
+            'templates/foo.html.twig' => '',
+        ])));
 
         $form = $this->createMock(FormInterface::class);
         $form->expects($this->once())->method('createView');
