@@ -53,7 +53,7 @@ class SerializerExtensionTest extends TestCase
         $runtime = new SerializerRuntime(new Serializer([new ObjectNormalizer($meta)], [new JsonEncoder(), new YamlEncoder()]));
 
         $runtimeLoader = new ContainerRuntimeLoader(new ServiceLocator([
-            SerializerRuntime::class => fn () => $runtime,
+            SerializerRuntime::class => static fn () => $runtime,
         ]));
 
         $twig = new Environment(new ArrayLoader(['template' => $template]));
