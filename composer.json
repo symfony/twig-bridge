@@ -31,7 +31,7 @@
         "symfony/emoji": "^7.4|^8.0",
         "symfony/expression-language": "^7.4|^8.0",
         "symfony/finder": "^7.4|^8.0",
-        "symfony/form": "^7.4.3|^8.0.3",
+        "symfony/form": "^7.4.4|^8.0.4",
         "symfony/html-sanitizer": "^7.4|^8.0",
         "symfony/http-foundation": "^7.4|^8.0",
         "symfony/http-kernel": "^7.4|^8.0",
@@ -57,7 +57,8 @@
     },
     "conflict": {
         "phpdocumentor/reflection-docblock": "<3.2.2",
-        "phpdocumentor/type-resolver": "<1.4.0"
+        "phpdocumentor/type-resolver": "<1.4.0",
+        "symfony/form": "<7.4.4|>8.0,<8.0.4"
     },
     "autoload": {
         "psr-4": { "Symfony\\Bridge\\Twig\\": "" },
