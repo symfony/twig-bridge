@@ -18,7 +18,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
 use Symfony\Component\HttpKernel\Event\ControllerArgumentsMetadata;
+use Symfony\Component\HttpKernel\Event\ControllerAttributeEvent;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
+use Symfony\Component\HttpKernel\EventListener\ControllerAttributesListener;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Twig\Environment;
 
@@ -29,6 +31,22 @@ class TemplateAttributeListener implements EventSubscriberInterface
     ) {
     }
 
+    public function onKernelControllerAttribute(ControllerAttributeEvent $event): void
+    {
+        if (!$event->kernelEvent instanceof ViewEvent) {
+            return;
+        }
+
+        if (!$event->kernelEvent->getRequest()->attributes->has('_template')) {
+            $event->kernelEvent->getRequest()->attributes->set('_template', $event->attribute);
+        }
+
+        $this->onKernelView($event->kernelEvent);
+    }
+
+    /**
+     * @internal since Symfony 8.1, use onKernelControllerAttribute() instead
+     */
     public function onKernelView(ViewEvent $event): void
     {
         $parameters = $event->getControllerResult();
@@ -71,8 +89,14 @@ class TemplateAttributeListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents(): array
     {
+        if (!class_exists(ControllerAttributesListener::class, false)) {
+            return [
+                KernelEvents::VIEW => ['onKernelView', -128],
+            ];
+        }
+
         return [
-            KernelEvents::VIEW => ['onKernelView', -128],
+            KernelEvents::VIEW.'.'.Template::class => 'onKernelControllerAttribute',
         ];
     }
 
