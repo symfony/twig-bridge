@@ -17,6 +17,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
+use Symfony\Component\HttpKernel\Event\ControllerArgumentsMetadata;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Twig\Environment;
@@ -37,11 +38,11 @@ class TemplateAttributeListener implements EventSubscriberInterface
         }
         $attribute = $event->getRequest()->attributes->get('_template');
 
-        if (!$attribute instanceof Template && !$attribute = $event->controllerArgumentsEvent?->getAttributes(Template::class)[0] ?? null) {
+        if (!$attribute instanceof Template && !$attribute = $event->{class_exists(ControllerArgumentsMetadata::class, false) ? 'controllerMetadata' : 'controllerArgumentsEvent'}?->getAttributes(Template::class)[0] ?? null) {
             return;
         }
 
-        $parameters ??= $this->resolveParameters($event->controllerArgumentsEvent, $attribute->vars);
+        $parameters ??= $this->resolveParameters($event->{class_exists(ControllerArgumentsMetadata::class, false) ? 'controllerMetadata' : 'controllerArgumentsEvent'}, $attribute->vars);
         $status = 200;
 
         foreach ($parameters as $k => $v) {
@@ -75,13 +76,13 @@ class TemplateAttributeListener implements EventSubscriberInterface
         ];
     }
 
-    private function resolveParameters(ControllerArgumentsEvent $event, ?array $vars): array
+    private function resolveParameters(ControllerArgumentsMetadata|ControllerArgumentsEvent $controllerMetadata, ?array $vars): array
     {
         if ([] === $vars) {
             return [];
         }
 
-        $parameters = $event->getNamedArguments();
+        $parameters = $controllerMetadata->getNamedArguments();
 
         if (null !== $vars) {
             $parameters = array_intersect_key($parameters, array_flip($vars));
