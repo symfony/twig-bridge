@@ -37,7 +37,7 @@ class TemplateAttributeListener implements EventSubscriberInterface
         }
         $attribute = $event->getRequest()->attributes->get('_template');
 
-        if (!$attribute instanceof Template && !$attribute = $event->controllerArgumentsEvent?->getAttributes()[Template::class][0] ?? null) {
+        if (!$attribute instanceof Template && !$attribute = $event->controllerArgumentsEvent?->getAttributes(Template::class)[0] ?? null) {
             return;
         }
 
