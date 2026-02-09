@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+8.1
+---
+
+ * Add `form_flow_*` Twig form helper functions to access values from `FormFlowCursor`
+
 8.0
 ---
 

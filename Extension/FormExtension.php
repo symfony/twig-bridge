@@ -68,6 +68,14 @@ final class FormExtension extends AbstractExtension
             new TwigFunction('field_help', $this->getFieldHelp(...)),
             new TwigFunction('field_errors', $this->getFieldErrors(...)),
             new TwigFunction('field_choices', $this->getFieldChoices(...)),
+            new TwigFunction('form_flow_total_steps', $this->getFormFlowTotalSteps(...)),
+            new TwigFunction('form_flow_steps', $this->getFormFlowSteps(...)),
+            new TwigFunction('form_flow_step_index', $this->getFormFlowStepIndex(...)),
+            new TwigFunction('form_flow_current_step', $this->getFormFlowCurrentStep(...)),
+            new TwigFunction('form_flow_next_step', $this->getFormFlowNextStep(...)),
+            new TwigFunction('form_flow_previous_step', $this->getFormFlowPreviousStep(...)),
+            new TwigFunction('form_flow_first_step', $this->getFormFlowFirstStep(...)),
+            new TwigFunction('form_flow_last_step', $this->getFormFlowLastStep(...)),
         ];
     }
 
@@ -149,6 +157,46 @@ final class FormExtension extends AbstractExtension
     public function getFieldChoices(FormView $view): iterable
     {
         yield from $this->createFieldChoicesList($view->vars['choices'], $view->vars['choice_translation_domain']);
+    }
+
+    public function getFormFlowTotalSteps(FormView $view): ?int
+    {
+        return ($view->vars['cursor'] ?? null)?->getTotalSteps();
+    }
+
+    public function getFormFlowSteps(FormView $view): ?array
+    {
+        return ($view->vars['cursor'] ?? null)?->getSteps();
+    }
+
+    public function getFormFlowCurrentStep(FormView $view): ?string
+    {
+        return ($view->vars['cursor'] ?? null)?->getCurrentStep();
+    }
+
+    public function getFormFlowStepIndex(FormView $view): ?int
+    {
+        return ($view->vars['cursor'] ?? null)?->getStepIndex();
+    }
+
+    public function getFormFlowNextStep(FormView $view): ?string
+    {
+        return ($view->vars['cursor'] ?? null)?->getNextStep();
+    }
+
+    public function getFormFlowPreviousStep(FormView $view): ?string
+    {
+        return ($view->vars['cursor'] ?? null)?->getPreviousStep();
+    }
+
+    public function getFormFlowFirstStep(FormView $view): ?string
+    {
+        return ($view->vars['cursor'] ?? null)?->getFirstStep();
+    }
+
+    public function getFormFlowLastStep(FormView $view): ?string
+    {
+        return ($view->vars['cursor'] ?? null)?->getLastStep();
     }
 
     private function createFieldChoicesList(iterable $choices, string|false|null $translationDomain): iterable
