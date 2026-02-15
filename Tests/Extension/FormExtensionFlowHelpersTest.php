@@ -44,6 +44,10 @@ class FormExtensionFlowHelpersTest extends FormIntegrationTestCase
         $this->assertNull($this->rawExtension->getFormFlowPreviousStep($view));
         $this->assertSame('organization', $this->rawExtension->getFormFlowFirstStep($view));
         $this->assertSame('confirmation', $this->rawExtension->getFormFlowLastStep($view));
+        $this->assertTrue($this->rawExtension->isFormFlowFirstStep($view));
+        $this->assertFalse($this->rawExtension->isFormFlowLastStep($view));
+        $this->assertTrue($this->rawExtension->canFormFlowMoveNext($view));
+        $this->assertFalse($this->rawExtension->canFormFlowMoveBack($view));
     }
 
     public function testFlowAtMiddleStep()
@@ -63,6 +67,10 @@ class FormExtensionFlowHelpersTest extends FormIntegrationTestCase
         $this->assertSame('organization', $this->rawExtension->getFormFlowPreviousStep($view));
         $this->assertSame('organization', $this->rawExtension->getFormFlowFirstStep($view));
         $this->assertSame('confirmation', $this->rawExtension->getFormFlowLastStep($view));
+        $this->assertFalse($this->rawExtension->isFormFlowFirstStep($view));
+        $this->assertFalse($this->rawExtension->isFormFlowLastStep($view));
+        $this->assertTrue($this->rawExtension->canFormFlowMoveNext($view));
+        $this->assertTrue($this->rawExtension->canFormFlowMoveBack($view));
     }
 
     public function testFlowAtLastStep()
@@ -82,6 +90,10 @@ class FormExtensionFlowHelpersTest extends FormIntegrationTestCase
         $this->assertSame('credentials', $this->rawExtension->getFormFlowPreviousStep($view));
         $this->assertSame('organization', $this->rawExtension->getFormFlowFirstStep($view));
         $this->assertSame('confirmation', $this->rawExtension->getFormFlowLastStep($view));
+        $this->assertFalse($this->rawExtension->isFormFlowFirstStep($view));
+        $this->assertTrue($this->rawExtension->isFormFlowLastStep($view));
+        $this->assertFalse($this->rawExtension->canFormFlowMoveNext($view));
+        $this->assertTrue($this->rawExtension->canFormFlowMoveBack($view));
     }
 
     public function testFormWithoutFlow()
@@ -99,5 +111,9 @@ class FormExtensionFlowHelpersTest extends FormIntegrationTestCase
         $this->assertNull($this->rawExtension->getFormFlowPreviousStep($view));
         $this->assertNull($this->rawExtension->getFormFlowFirstStep($view));
         $this->assertNull($this->rawExtension->getFormFlowLastStep($view));
+        $this->assertFalse($this->rawExtension->isFormFlowFirstStep($view));
+        $this->assertFalse($this->rawExtension->isFormFlowLastStep($view));
+        $this->assertFalse($this->rawExtension->canFormFlowMoveNext($view));
+        $this->assertFalse($this->rawExtension->canFormFlowMoveBack($view));
     }
 }

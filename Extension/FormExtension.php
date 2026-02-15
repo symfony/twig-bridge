@@ -76,6 +76,10 @@ final class FormExtension extends AbstractExtension
             new TwigFunction('form_flow_previous_step', $this->getFormFlowPreviousStep(...)),
             new TwigFunction('form_flow_first_step', $this->getFormFlowFirstStep(...)),
             new TwigFunction('form_flow_last_step', $this->getFormFlowLastStep(...)),
+            new TwigFunction('form_flow_is_first_step', $this->isFormFlowFirstStep(...)),
+            new TwigFunction('form_flow_is_last_step', $this->isFormFlowLastStep(...)),
+            new TwigFunction('form_flow_can_move_next', $this->canFormFlowMoveNext(...)),
+            new TwigFunction('form_flow_can_move_back', $this->canFormFlowMoveBack(...)),
         ];
     }
 
@@ -197,6 +201,26 @@ final class FormExtension extends AbstractExtension
     public function getFormFlowLastStep(FormView $view): ?string
     {
         return ($view->vars['cursor'] ?? null)?->getLastStep();
+    }
+
+    public function isFormFlowFirstStep(FormView $view): bool
+    {
+        return ($view->vars['cursor'] ?? null)?->isFirstStep() ?? false;
+    }
+
+    public function isFormFlowLastStep(FormView $view): bool
+    {
+        return ($view->vars['cursor'] ?? null)?->isLastStep() ?? false;
+    }
+
+    public function canFormFlowMoveBack(FormView $view): bool
+    {
+        return ($view->vars['cursor'] ?? null)?->canMoveBack() ?? false;
+    }
+
+    public function canFormFlowMoveNext(FormView $view): bool
+    {
+        return ($view->vars['cursor'] ?? null)?->canMoveNext() ?? false;
     }
 
     private function createFieldChoicesList(iterable $choices, string|false|null $translationDomain): iterable
