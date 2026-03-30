@@ -63,7 +63,7 @@
         "symfony/form": "<6.4.32|>7,<7.3.10|>7.4,<7.4.4|>8.0,<8.0.4",
         "symfony/http-foundation": "<6.4",
         "symfony/http-kernel": "<6.4",
-        "symfony/form": "<6.4.36|>7,<7.4.8|>8.0,<8.0.8",
+        "symfony/mime": "<6.4.36|>7,<7.4.8|>8.0,<8.0.8",
         "symfony/serializer": "<6.4",
         "symfony/translation": "<6.4",
         "symfony/workflow": "<6.4"
