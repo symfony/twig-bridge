@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Twig\Mime\BodyRenderer;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bridge\Twig\Mime\WrappedTemplatedEmail;
+use Symfony\Component\Mime\Part\DataPart;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;
 use Twig\Loader\FilesystemLoader;
@@ -27,9 +28,17 @@ class WrappedTemplatedEmailTest extends TestCase
     public function testEmailImage()
     {
         $email = $this->buildEmail('email/image.html.twig');
+        $html = $email->getHtmlBody();
         $body = $email->toString();
-        $contentId1 = $email->getAttachments()[0]->getContentId();
-        $contentId2 = $email->getAttachments()[1]->getContentId();
+
+        $inlineParts = array_values(array_filter($email->getAttachments(), static fn (DataPart $part) => $part->hasContentId()));
+        self::assertCount(2, $inlineParts);
+
+        $contentId1 = $inlineParts[0]->getContentId();
+        $contentId2 = $inlineParts[1]->getContentId();
+
+        self::assertStringContainsString("cid:$contentId1", $html);
+        self::assertStringContainsString("cid:$contentId2", $html);
 
         $part1 = str_replace("\n", "\r\n",
             <<<PART
@@ -54,7 +63,6 @@ class WrappedTemplatedEmailTest extends TestCase
                 PART
         );
 
-        self::assertStringContainsString('![](cid:@assets/images/logo1.png)![](cid:image.png)', $body);
         self::assertStringContainsString($part1, $body);
         self::assertStringContainsString($part2, $body);
     }
