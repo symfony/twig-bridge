@@ -52,17 +52,16 @@ final class TranslationDefaultDomainNodeVisitor implements NodeVisitorInterface
                 $this->scope->set('domain', $node->getNode('expr'));
 
                 return $node;
-            } else {
-                $var = $this->getVarName();
-                $name = class_exists(AssignContextVariable::class) ? new AssignContextVariable($var, $node->getTemplateLine()) : new AssignNameExpression($var, $node->getTemplateLine());
-                $this->scope->set('domain', class_exists(ContextVariable::class) ? new ContextVariable($var, $node->getTemplateLine()) : new NameExpression($var, $node->getTemplateLine()));
-
-                if (class_exists(Nodes::class)) {
-                    return new SetNode(false, new Nodes([$name]), new Nodes([$node->getNode('expr')]), $node->getTemplateLine());
-                } else {
-                    return new SetNode(false, new Node([$name]), new Node([$node->getNode('expr')]), $node->getTemplateLine());
-                }
             }
+            $var = $this->getVarName();
+            $name = class_exists(AssignContextVariable::class) ? new AssignContextVariable($var, $node->getTemplateLine()) : new AssignNameExpression($var, $node->getTemplateLine());
+            $this->scope->set('domain', class_exists(ContextVariable::class) ? new ContextVariable($var, $node->getTemplateLine()) : new NameExpression($var, $node->getTemplateLine()));
+
+            if (class_exists(Nodes::class)) {
+                return new SetNode(false, new Nodes([$name]), new Nodes([$node->getNode('expr')]), $node->getTemplateLine());
+            }
+
+            return new SetNode(false, new Node([$name]), new Node([$node->getNode('expr')]), $node->getTemplateLine());
         }
 
         if (!$this->scope->has('domain')) {
