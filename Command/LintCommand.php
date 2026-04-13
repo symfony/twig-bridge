@@ -58,23 +58,23 @@ class LintCommand extends Command
             ->addOption('show-deprecations', null, InputOption::VALUE_NONE, 'Show deprecations as errors')
             ->addArgument('filename', InputArgument::IS_ARRAY, 'A file, a directory or "-" for reading from STDIN')
             ->setHelp(<<<'EOF'
-The <info>%command.name%</info> command lints a template and outputs to STDOUT
-the first encountered syntax error.
+                The <info>%command.name%</info> command lints a template and outputs to STDOUT
+                the first encountered syntax error.
 
-You can validate the syntax of contents passed from STDIN:
+                You can validate the syntax of contents passed from STDIN:
 
-  <info>cat filename | php %command.full_name% -</info>
+                  <info>cat filename | php %command.full_name% -</info>
 
-Or the syntax of a file:
+                Or the syntax of a file:
 
-  <info>php %command.full_name% filename</info>
+                  <info>php %command.full_name% filename</info>
 
-Or of a whole directory:
+                Or of a whole directory:
 
-  <info>php %command.full_name% dirname</info>
-  <info>php %command.full_name% dirname --format=json</info>
+                  <info>php %command.full_name% dirname</info>
+                  <info>php %command.full_name% dirname --format=json</info>
 
-EOF
+                EOF
             )
         ;
     }
