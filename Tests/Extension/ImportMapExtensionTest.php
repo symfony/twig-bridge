@@ -37,7 +37,7 @@ class ImportMapExtensionTest extends TestCase
         $runtime = new ImportMapRuntime($importMapRenderer);
 
         $runtimeLoader = new ContainerRuntimeLoader(new ServiceLocator([
-            ImportMapRuntime::class => fn () => $runtime,
+            ImportMapRuntime::class => static fn () => $runtime,
         ]));
         $twig->addRuntimeLoader($runtimeLoader);
 

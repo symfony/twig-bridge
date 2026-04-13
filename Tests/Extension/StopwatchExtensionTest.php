@@ -84,7 +84,7 @@ class StopwatchExtensionTest extends TestCase
         $stopwatch
             ->expects($this->exactly($expectedCalls))
             ->method('stop')
-            ->willReturnCallback(function (string $name) use (&$expectedStopCalls) {
+            ->willReturnCallback(static function (string $name) use (&$expectedStopCalls) {
                 [$expectedName] = array_shift($expectedStopCalls);
                 $expectedName->evaluate($name);
 

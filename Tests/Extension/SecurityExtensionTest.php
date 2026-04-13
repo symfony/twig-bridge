@@ -125,7 +125,7 @@ class SecurityExtensionTest extends TestCase
             ->expects($this->once())
             ->method('isGranted')
             ->with('ROLE', 'object', $this->isInstanceOf(AccessDecision::class))
-            ->willReturnCallback(function ($attribute, $subject, $accessDecision) {
+            ->willReturnCallback(static function ($attribute, $subject, $accessDecision) {
                 $accessDecision->isGranted = true;
 
                 return true;
@@ -149,7 +149,7 @@ class SecurityExtensionTest extends TestCase
             ->expects($this->once())
             ->method('isGranted')
             ->with('ROLE', $this->isInstanceOf(FieldVote::class), $this->isInstanceOf(AccessDecision::class))
-            ->willReturnCallback(function ($attribute, $subject, $accessDecision) {
+            ->willReturnCallback(static function ($attribute, $subject, $accessDecision) {
                 $accessDecision->isGranted = false;
 
                 return false;

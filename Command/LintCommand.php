@@ -75,6 +75,7 @@ class LintCommand extends Command
                 The <info>--format</info> option specifies the format of the command output:
 
                   <info>php %command.full_name% dirname --format=json</info>
+
                 EOF
             )
         ;
@@ -215,7 +216,7 @@ class LintCommand extends Command
     {
         $errors = 0;
 
-        array_walk($filesInfo, function (&$v) use (&$errors) {
+        array_walk($filesInfo, static function (&$v) use (&$errors) {
             $v['file'] = (string) $v['file'];
             unset($v['template']);
             if (!$v['valid']) {

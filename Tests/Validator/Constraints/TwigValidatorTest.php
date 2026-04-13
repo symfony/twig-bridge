@@ -32,7 +32,7 @@ class TwigValidatorTest extends ConstraintValidatorTestCase
         $environment->addFilter(new TwigFilter('humanize_filter', fn ($v) => $v));
         $options = ['deprecation_info' => new DeprecatedCallableInfo('foo/bar', '1.1')];
 
-        $environment->addFilter(new TwigFilter('deprecated_filter', fn ($v) => $v, $options));
+        $environment->addFilter(new TwigFilter('deprecated_filter', static fn ($v) => $v, $options));
 
         return new TwigValidator($environment);
     }
