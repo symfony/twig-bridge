@@ -172,7 +172,7 @@ class LintCommandTest extends TestCase
     {
         $environment = new Environment(new FilesystemLoader(\dirname(__DIR__).'/Fixtures/templates/'));
         $options = ['deprecation_info' => new DeprecatedCallableInfo('foo/bar', '1.1')];
-        $environment->addFilter(new TwigFilter('deprecated_filter', fn ($v) => $v, $options));
+        $environment->addFilter(new TwigFilter('deprecated_filter', static fn ($v) => $v, $options));
 
         $command = new LintCommand($environment);
 

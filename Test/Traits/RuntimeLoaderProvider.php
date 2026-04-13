@@ -24,7 +24,7 @@ trait RuntimeLoaderProvider
     protected function registerTwigRuntimeLoader(Environment $environment, FormRenderer $renderer)
     {
         $environment->addRuntimeLoader(new ContainerRuntimeLoader(new ServiceLocator([
-            FormRenderer::class => fn () => $renderer,
+            FormRenderer::class => static fn () => $renderer,
         ])));
     }
 }
