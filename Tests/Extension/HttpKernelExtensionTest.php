@@ -79,7 +79,7 @@ class HttpKernelExtensionTest extends TestCase
         $twig->addExtension(new HttpKernelExtension());
 
         $loader = new ContainerRuntimeLoader(new ServiceLocator([
-            HttpKernelRuntime::class => fn () => $kernelRuntime,
+            HttpKernelRuntime::class => static fn () => $kernelRuntime,
         ]));
         $twig->addRuntimeLoader($loader);
 
@@ -112,7 +112,7 @@ class HttpKernelExtensionTest extends TestCase
         $twig->addExtension(new HttpKernelExtension());
 
         $loader = new ContainerRuntimeLoader(new ServiceLocator([
-            HttpKernelRuntime::class => fn () => new HttpKernelRuntime($renderer),
+            HttpKernelRuntime::class => static fn () => new HttpKernelRuntime($renderer),
         ]));
         $twig->addRuntimeLoader($loader);
 

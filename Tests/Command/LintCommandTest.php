@@ -165,7 +165,7 @@ class LintCommandTest extends TestCase
         } else {
             $options = ['deprecated' => true];
         }
-        $environment->addFilter(new TwigFilter('deprecated_filter', fn ($v) => $v, $options));
+        $environment->addFilter(new TwigFilter('deprecated_filter', static fn ($v) => $v, $options));
 
         $command = new LintCommand($environment);
 

@@ -36,7 +36,7 @@ class DumpExtensionTest extends TestCase
 
         $dumped = null;
         $exception = null;
-        $prevDumper = VarDumper::setHandler(function ($var) use (&$dumped) { $dumped = $var; });
+        $prevDumper = VarDumper::setHandler(static function ($var) use (&$dumped) { $dumped = $var; });
 
         try {
             $this->assertEquals($expectedOutput, $twig->render('template'));
@@ -112,7 +112,7 @@ class DumpExtensionTest extends TestCase
     public function testCustomDumper()
     {
         $output = '';
-        $lineDumper = function ($line) use (&$output) {
+        $lineDumper = static function ($line) use (&$output) {
             $output .= $line;
         };
 

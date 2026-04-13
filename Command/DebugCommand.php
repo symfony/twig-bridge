@@ -165,7 +165,7 @@ class DebugCommand extends Command
                 [$namespace, $shortname] = $this->parseTemplateName($name);
                 $alternatives = $this->findAlternatives($shortname, $shortnames);
                 if (FilesystemLoader::MAIN_NAMESPACE !== $namespace) {
-                    $alternatives = array_map(fn ($shortname) => '@'.$namespace.'/'.$shortname, $alternatives);
+                    $alternatives = array_map(static fn ($shortname) => '@'.$namespace.'/'.$shortname, $alternatives);
                 }
             }
 
@@ -349,7 +349,7 @@ class DebugCommand extends Command
             }
 
             // format args
-            $args = array_map(function (\ReflectionParameter $param) {
+            $args = array_map(static function (\ReflectionParameter $param) {
                 if ($param->isDefaultValueAvailable()) {
                     return $param->getName().' = '.json_encode($param->getDefaultValue());
                 }
@@ -544,7 +544,7 @@ class DebugCommand extends Command
         }
 
         $threshold = 1e3;
-        $alternatives = array_filter($alternatives, fn ($lev) => $lev < 2 * $threshold);
+        $alternatives = array_filter($alternatives, static fn ($lev) => $lev < 2 * $threshold);
         ksort($alternatives, \SORT_NATURAL | \SORT_FLAG_CASE);
 
         return array_keys($alternatives);
