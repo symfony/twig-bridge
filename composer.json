@@ -34,7 +34,7 @@
         "symfony/http-foundation": "^5.4|^6.0|^7.0",
         "symfony/http-kernel": "^6.4|^7.0",
         "symfony/intl": "^5.4|^6.0|^7.0",
-        "symfony/mime": "^6.2|^7.0",
+        "symfony/mime": "^6.4.37|^7.4.9",
         "symfony/polyfill-intl-icu": "~1.0",
         "symfony/property-info": "^5.4|^6.0|^7.0",
         "symfony/routing": "^5.4|^6.0|^7.0",
@@ -61,7 +61,7 @@
         "symfony/form": "<6.4.32|>7,<7.3.10|>7.4,<7.4.4",
         "symfony/http-foundation": "<5.4",
         "symfony/http-kernel": "<6.4",
-        "symfony/mime": "<6.2",
+        "symfony/mime": "<6.4.37|>=7.0,<7.4.9",
         "symfony/serializer": "<6.4",
         "symfony/translation": "<5.4",
         "symfony/workflow": "<5.4"
