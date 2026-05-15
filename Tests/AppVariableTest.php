@@ -307,7 +307,14 @@ class AppVariableTest extends TestCase
 
         $enabledLocales = $this->appVariable->getEnabled_locales();
 
-        $this->assertEquals(['en', 'fr', 'de'], array_values($enabledLocales));
+        $this->assertSame(['en', 'fr', 'de'], $enabledLocales);
+    }
+
+    public function testSetEnabledLocalesPreservesNonEmptyStringValues()
+    {
+        $this->appVariable->setEnabledLocales(['en', '0', 'fr']);
+
+        $this->assertSame(['en', '0', 'fr'], $this->appVariable->getEnabled_locales());
     }
 
     private function setFlashMessages($sessionHasStarted = true)

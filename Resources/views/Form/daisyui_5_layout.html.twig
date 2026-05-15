@@ -6,7 +6,8 @@
 {%- endblock form_row -%}
 
 {%- block widget_attributes -%}
-    {%- set attr = attr|merge({class: attr.class|default(widget_class|default('mt-1 w-full')) ~ (errors|length ? ' ' ~ widget_errors_class|default('input-error'))}) -%}
+    {%- set widget_errors_class = widget_errors_class is defined ? widget_errors_class : 'input-error' -%}
+    {%- set attr = attr|merge({class: attr.class|default(widget_class|default('mt-1 w-full')) ~ (errors|length and widget_errors_class ? ' ' ~ widget_errors_class : '')}) -%}
     {{- parent() -}}
 {%- endblock widget_attributes -%}
 
@@ -14,7 +15,7 @@
     {%- if errors|length > 0 -%}
         <ul>
             {%- for error in errors -%}
-                <li class="{{ error_item_class|default('text-error') }}">{{ error.message }}</li>
+                <li class="{{ error_item_class|default('text-error') }}" id="{{ id ~ '_error' ~ loop.index }}">{{ error.message }}</li>
             {%- endfor -%}
         </ul>
     {%- endif -%}
@@ -46,10 +47,9 @@
         {%- for child in form %}
             <label class="flex items-center label mb-2">
                 {{- form_widget(child) -}}
-                {% set label = child.vars.label %}
-                {% if label != false %}
-                    {{- block('form_label_content') -}}
-                {% endif %}
+                {%- if child.vars.label is not same as(false) -%}
+                    {{- form_label(child, null, {translation_domain: choice_translation_domain, label_attr: {class: ''}}) -}}
+                {%- endif -%}
             </label>
         {% endfor -%}
     </div>
@@ -99,14 +99,14 @@
 
 {%- block file_widget -%}
     {% set type = type|default('file') %}
-    {%- set widget_class = (widget_class|default('file-input mt-2') ~ (errors|length ? ' file-input-error')) -%}
+    {%- set widget_class = widget_class|default('file-input mt-2') -%}
+    {%- set widget_errors_class = 'file-input-error' -%}
     {{- block('form_widget_simple') -}}
 {%- endblock file_widget %}
 
 {% block form_widget_simple -%}
     {%- if type is not defined or type not in ['hidden', 'range', 'file'] %}
-        {%- set widget_class = ' input mt-2' %}
-        {%- set attr = attr|merge({class: (attr.class|default('') ~ widget_class)|trim}) -%}
+        {%- set widget_class = widget_class|default('input mt-2') -%}
     {% endif -%}
 
     {{- parent() -}}

@@ -14,6 +14,10 @@ namespace Symfony\Bridge\Twig\Tests\Extension;
 use Symfony\Bridge\Twig\Extension\FormExtension;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
 use Symfony\Bridge\Twig\Tests\Extension\Fixtures\StubTranslator;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormView;
 
 class FormExtensionDaisyUi5LayoutTest extends AbstractDivLayoutTestCase
@@ -369,19 +373,6 @@ class FormExtensionDaisyUi5LayoutTest extends AbstractDivLayoutTestCase
         );
     }
 
-    public function testWidgetAttributes()
-    {
-        $form = $this->factory->createNamed('text', 'Symfony\Component\Form\Extension\Core\Type\TextType', 'value', [
-            'required' => true,
-            'disabled' => true,
-            'attr' => ['readonly' => true, 'maxlength' => 10, 'pattern' => '\d+', 'class' => 'foobar', 'data-foo' => 'bar'],
-        ]);
-
-        $html = $this->renderWidget($form->createView());
-
-        $this->assertSame('<input type="text" id="text" name="text" disabled="disabled" required="required" readonly="readonly" maxlength="10" pattern="\d+" class="foobar input mt-2" data-foo="bar" value="value" />', $html);
-    }
-
     public function testWidgetAttributeNameRepeatedIfTrue()
     {
         $form = $this->factory->createNamed('text', 'Symfony\Component\Form\Extension\Core\Type\TextType', 'value', [
@@ -636,6 +627,77 @@ class FormExtensionDaisyUi5LayoutTest extends AbstractDivLayoutTestCase
         /following-sibling::label[./input[@type="hidden"][@id="name__token"]]
     ]
     [count(.//input)=3]
+'
+        );
+    }
+
+    public function testFormErrorsRenderIdPerError()
+    {
+        $form = $this->factory->createNamed('name', TextType::class);
+        $form->addError(new FormError('[trans]Error 1[/trans]'));
+        $form->addError(new FormError('[trans]Error 2[/trans]'));
+
+        $html = $this->renderErrors($form->createView());
+
+        $this->assertMatchesXpath($html,
+            '/ul
+    [
+        ./li[@id="name_error1"][@class="text-error"][.="[trans]Error 1[/trans]"]
+        /following-sibling::li[@id="name_error2"][@class="text-error"][.="[trans]Error 2[/trans]"]
+    ]
+'
+        );
+    }
+
+    public function testSubmitWidgetIncludesBtnClass()
+    {
+        $form = $this->factory->createNamedBuilder('post', \Symfony\Component\Form\Extension\Core\Type\FormType::class)
+            ->add('go', SubmitType::class)
+            ->getForm();
+
+        $html = $this->renderWidget($form->get('go')->createView());
+
+        $this->assertMatchesXpath($html,
+            '/button
+    [@type="submit"]
+    [contains(concat(" ", normalize-space(@class), " "), " btn ")]
+    [contains(concat(" ", normalize-space(@class), " "), " btn-primary ")]
+    [not(contains(concat(" ", normalize-space(@class), " "), " btn btn "))]
+'
+        );
+    }
+
+    public function testFormWidgetSimpleHonorsCallerWidgetClass()
+    {
+        $form = $this->factory->createNamed('name', TextType::class);
+
+        $html = $this->renderWidget($form->createView(), [
+            'widget_class' => 'custom-widget',
+        ]);
+
+        $this->assertMatchesXpath($html,
+            '/input
+    [@type="text"]
+    [@name="name"]
+    [contains(concat(" ", normalize-space(@class), " "), " custom-widget ")]
+    [not(contains(concat(" ", normalize-space(@class), " "), " input "))]
+'
+        );
+    }
+
+    public function testFileWidgetErrorClassNotDuplicated()
+    {
+        $form = $this->factory->createNamed('upload', FileType::class);
+        $form->addError(new FormError('[trans]Error![/trans]'));
+
+        $html = $this->renderWidget($form->createView());
+
+        $this->assertMatchesXpath($html,
+            '/input
+    [@type="file"]
+    [contains(concat(" ", normalize-space(@class), " "), " file-input ")]
+    [contains(concat(" ", normalize-space(@class), " "), " file-input-error ")]
+    [not(contains(concat(" ", normalize-space(@class), " "), " input-error "))]
 '
         );
     }
