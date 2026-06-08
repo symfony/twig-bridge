@@ -22,6 +22,18 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\PropertyNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
+class TemplatedEmailToStringGadget
+{
+    public static bool $fired = false;
+
+    public function __toString(): string
+    {
+        self::$fired = true;
+
+        return '';
+    }
+}
+
 class TemplatedEmailTest extends TestCase
 {
     public function test()
@@ -123,5 +135,41 @@ class TemplatedEmailTest extends TestCase
         $expected->from('fabien@symfony.com');
         $this->assertEquals($expected->getHeaders(), $n->getHeaders());
         $this->assertEquals($expected->getBody(), $n->getBody());
+    }
+
+    /**
+     * @dataProvider provideTrampolineSlots
+     */
+    public function testUnserializeRejectsObjectInTypedStringProperty(int $slot)
+    {
+        $email = (new TemplatedEmail())
+            ->htmlTemplate('html.twig')
+            ->textTemplate('text.twig')
+            ->locale('en')
+        ;
+        $data = $email->__serialize();
+        $data[$slot] = new TemplatedEmailToStringGadget();
+        $payload = \sprintf('O:%d:"%s":%d:{', \strlen(TemplatedEmail::class), TemplatedEmail::class, \count($data));
+        foreach ($data as $key => $value) {
+            $payload .= serialize($key).serialize($value);
+        }
+        $payload .= '}';
+        TemplatedEmailToStringGadget::$fired = false;
+
+        try {
+            unserialize($payload);
+            $this->fail('Expected BadMethodCallException.');
+        } catch (\BadMethodCallException $e) {
+        }
+
+        $this->assertFalse(TemplatedEmailToStringGadget::$fired, '__toString gadget must not fire during unserialize');
+    }
+
+    public static function provideTrampolineSlots(): iterable
+    {
+        // [htmlTemplate, textTemplate, context, parentData, locale]
+        yield 'htmlTemplate' => [0];
+        yield 'textTemplate' => [1];
+        yield 'locale' => [4];
     }
 }
