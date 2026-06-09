@@ -266,6 +266,10 @@ class NotificationEmail extends TemplatedEmail
      */
     public function __unserialize(array $data): void
     {
+        if (($data[1] ?? null) instanceof \Stringable) {
+            throw new \BadMethodCallException('Cannot unserialize '.self::class);
+        }
+
         if (4 === \count($data)) {
             [$this->context, $this->theme, $this->rendered, $parentData] = $data;
         } elseif (3 === \count($data)) {
